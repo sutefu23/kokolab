@@ -3,3 +3,7 @@
 
 # Docker Compose
 .env
+
+backend/yarn.lock
+backend/package-lock.json
+backend/composer.lock
