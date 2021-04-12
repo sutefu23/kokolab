@@ -121,6 +121,8 @@ db:
 	docker-compose exec db bash
 sql:
 	docker-compose exec db bash -c 'mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE'
+pma:
+	docker-compose exec pma bash
 redis:
 	docker-compose exec redis redis-cli
 ide-helper:
