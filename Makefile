@@ -117,6 +117,9 @@ yarn-watch-poll:
 	docker-compose exec web yarn watch-poll
 yarn-hot:
 	docker-compose exec web yarn hot
+packages=""
+yarn-add:
+	docker-compose exec web yarn add ${packages}
 db:
 	docker-compose exec db bash
 sql:

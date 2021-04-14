@@ -55,7 +55,7 @@ body {
 }
 
 .bg-login-image {
-    background: url("./assets/login.png") !important;
+    background: url("./assets/kokolab.jpg") !important;
     background-position: center !important;
     background-size: cover !important;
 }

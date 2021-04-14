@@ -24,3 +24,8 @@ export  interface IOrderFormState {
     amount: IFormStateField<number>;
     totalPrice: IFormStateField<number>;
 };
+
+export interface ILoginFormState {
+    email: IFormStateField<string>;
+    password: IFormStateField<string>;
+  }

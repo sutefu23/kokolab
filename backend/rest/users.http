@@ -1,0 +1,11 @@
+@hostname = localhost
+###
+
+POST http://{{hostname}}/api/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+X-Requested-With: XMLHttpRequest
+
+{
+    "email": "$processEnv DEFAULT_MAIL",
+    "password": "$processEnv DEFAULT_PASS"
+}

@@ -9,14 +9,8 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
- mix.webpackConfig({
-    resolve: {
-      extensions: ['.js', '.jsx', '.tsx', '.json'],
-      alias: {
-        '@': __dirname + '/resources/assets/ts'
-      },
-    },
-  })
+
 mix.ts('resources/ts/index.tsx', 'public/js')
     .react()
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    .browserSync('localhost');

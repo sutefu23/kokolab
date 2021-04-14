@@ -25,6 +25,7 @@ services:
       dockerfile: ./infra/docker/nginx/Dockerfile
     ports:
       - ${WEB_PORT:-80}:80
+      - 3000:3000
     volumes:
       - php-fpm-socket:/var/run/php-fpm
       - ./backend:/work/backend

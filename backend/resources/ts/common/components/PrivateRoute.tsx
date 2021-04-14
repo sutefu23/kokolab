@@ -9,7 +9,6 @@ import Login from "../../components/Account/Login";
 export function PrivateRoute({ children, ...rest }: RouteProps): JSX.Element {
 
     const account: IAccount = useSelector((state: IStateType) => state.account);
-
     return (
         <Route
             {...rest}

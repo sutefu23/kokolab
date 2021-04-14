@@ -3,7 +3,7 @@ import { OnChangeModel } from "../../common/types/Form.types";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/actions/account.actions";
 import TextInput from "../../common/components/TextInput";
-
+import axios from 'axios';
 const Login: React.FC = () => {
   const dispatch: Dispatch<any> = useDispatch();
 
@@ -16,10 +16,15 @@ const Login: React.FC = () => {
     setFormState({ ...formState, [model.field]: { error: model.error, value: model.value } });
   }
 
-  function submit(e: FormEvent<HTMLFormElement>): void {
+  async function submit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     if(isFormInvalid()) { return; }
-    dispatch(login(formState.email.value));
+    try{
+      const data = await axios.post('/api/login', {email: formState.email.value, password: formState.password.value})
+      dispatch(login(formState.email.value));
+    }catch(e){
+      alert(e)
+    }
   }
 
   function isFormInvalid() {
