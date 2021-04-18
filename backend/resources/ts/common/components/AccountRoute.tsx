@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { IStateType } from "../../store/models/root.interface";
 import { IAccount } from "../../store/models/account.interface";
-import Login from "../../components/Account/Login";
+import Login from "../../pages/Account/Login";
 
 
 export function AccountRoute({ children, ...rest }: RouteProps): JSX.Element {

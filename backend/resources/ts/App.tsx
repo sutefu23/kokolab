@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import "./styles/sb-admin-2.min.css";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
-import Login from "./components/Account/Login";
-import Admin from "./components/Admin/Admin";
+import Login from "./pages/Account/Login";
+import Admin from "./pages/Admin/Admin";
 import { PrivateRoute } from "./common/components/PrivateRoute";
 import { AccountRoute } from "./common/components/AccountRoute";
 
