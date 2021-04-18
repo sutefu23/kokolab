@@ -1,4 +1,4 @@
-import React, { Fragment, Dispatch } from "react";
+import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentPath } from "../../store/actions/root.actions";
 import TopCard from "../../common/components/TopCard";
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
   const totalSales: number = orders.reduce((prev, next) => prev + next.totalPrice, 0);
   const totalOrderAmount: number = orders.reduce((prev, next) => prev + next.amount, 0);
 
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
   dispatch(updateCurrentPath("home", ""));
 
   return (

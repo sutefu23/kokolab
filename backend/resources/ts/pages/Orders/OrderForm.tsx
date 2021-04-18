@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, Fragment, Dispatch } from "react";
+import React, { useState, FormEvent, Fragment } from "react";
 import { IProduct } from "../../store/models/product.interface";
 import TextInput from "../../common/components/TextInput";
 import NumberInput from "../../common/components/NumberInput";
@@ -10,7 +10,7 @@ import { clearSelectedProduct, changeProductAmount } from "../../store/actions/p
 import { IStateType } from "../../store/models/root.interface";
 
 const OrderForm: React.FC = () => {
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useDispatch();
     const selectedProduct: IProduct | null = useSelector((state: IStateType) => state.products.selectedProduct);
     const initialFormState: IOrderFormState = {
         name: { error: "", value: "" },

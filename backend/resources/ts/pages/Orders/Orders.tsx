@@ -1,4 +1,4 @@
-import React, { Fragment, Dispatch } from "react";
+import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentPath } from "../../store/actions/root.actions";
 import { IOrder } from "../../store/models/order.interface";
@@ -9,6 +9,7 @@ import ProductList from "../Products/ProductsList";
 import { IProduct } from "../../store/models/product.interface";
 import { changeSelectedProduct, clearSelectedProduct } from "../../store/actions/products.action";
 import { IStateType } from "../../store/models/root.interface";
+import FileUploader from "../../common/components/FileUploder";
 
 const Orders: React.FC = () => {
     const dispatch = useDispatch();
