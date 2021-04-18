@@ -9,8 +9,8 @@ function SelectInput(props: SelectProps): JSX.Element {
 
 
     function onValueChanged(event: ChangeEvent<HTMLSelectElement>): void {
-        let [error, validClass, elementValue] = ["", "", event.target.value];
-
+        let [error, validClass] = ["", ""];
+        const elementValue = event.target.value;
         [error, validClass] = (!elementValue && props.required) ?
             ["Value has to be selected", "is-invalid"] : ["", "is-valid"];
 

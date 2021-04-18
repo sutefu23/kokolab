@@ -1,8 +1,35 @@
 {
-  "extends": ["eslint:recommended"],
-  "plugins": [],
-  "parserOptions": {},
-  "env": {"browser": true},
+  "extends": [
+    "eslint:recommended", 
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/recommended",
+    "plugin:jest/recommended",
+    "prettier"
+    // "prettier/@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "react",
+    "jest",
+    "@typescript-eslint"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": 7, 
+    "sourceType": "module",
+    "ecmaFeatures":{ "jsx": true }
+  },
+  "settings": {
+    "react":{
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "jest/globals": true
+  },
   "globals": {},
   "rules": {}
 }

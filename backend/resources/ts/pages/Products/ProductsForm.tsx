@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, Dispatch, Fragment } from "react";
+import React, { useState, FormEvent, Fragment } from "react";
 import { IStateType, IProductState } from "../../store/models/root.interface";
 import { useSelector, useDispatch } from "react-redux";
 import { IProduct, ProductModificationStatus } from "../../store/models/product.interface";
@@ -11,7 +11,7 @@ import SelectInput from "../../common/components/Select";
 import { OnChangeModel, IProductFormState } from "../../common/types/Form.types";
 
 const ProductForm: React.FC = () => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
   const products: IProductState | null = useSelector((state: IStateType) => state.products);
   let product: IProduct | null = products.selectedProduct;
   const isCreate: boolean = (products.modificationState === ProductModificationStatus.Create);
@@ -39,7 +39,7 @@ const ProductForm: React.FC = () => {
       return;
     }
 
-    let saveUserFn: Function = (isCreate) ? addProduct : editProduct;
+    const saveUserFn = (isCreate) ? addProduct : editProduct;
     saveForm(formState, saveUserFn);
   }
 
@@ -66,7 +66,7 @@ const ProductForm: React.FC = () => {
   }
 
   function getDisabledClass(): string {
-    let isError: boolean = isFormInvalid();
+    const isError: boolean = isFormInvalid();
     return isError ? "disabled" : "";
   }
 

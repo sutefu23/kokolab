@@ -13,7 +13,7 @@ import { addNotification } from "../../store/actions/notifications.action";
 import { ProductModificationStatus, IProduct } from "../../store/models/product.interface";
 
 const Products: React.FC = () => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
   const products: IProductState = useSelector((state: IStateType) => state.products);
   const path: IRootPageStateType = useSelector((state: IStateType) => state.root.page);
   const numberItemsCount: number = products.products.length;

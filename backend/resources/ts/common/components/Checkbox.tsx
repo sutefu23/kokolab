@@ -9,7 +9,9 @@ function Checkbox(props: CheckboxProps): JSX.Element {
 
 
     function onValueChanged(event: ChangeEvent<HTMLInputElement>): void {
-        let [error, validClass, elementValue] = ["", "", event.target.checked];
+        let [error, validClass] = ["", ""];
+        const elementValue = event.target.value;
+
 
         [error, validClass] = (!elementValue && props.required) ?
             ["Value has to be checked", "is-invalid"] : ["", "is-valid"];
@@ -20,7 +22,7 @@ function Checkbox(props: CheckboxProps): JSX.Element {
         setTouch(true);
         setError(error);
         setHtmlClass(validClass);
-        setValue(elementValue);
+        setValue(Boolean(elementValue));
     }
 
     return (

@@ -1,12 +1,14 @@
 import { OnChangeModel } from "./Form.types";
 
-export type SelectProps = {
-    required?: boolean,
+export type FileUploaderProps = {
+    required: boolean,
     onChange: (args: OnChangeModel) => void,
     id: string,
     label: string,
+    placeholder: string,
     value: string,
+    type?: string,
+    maxLength: number,
     inputClass?: string,
-    options: string[],
     field: string
 };

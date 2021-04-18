@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
-import { TextInputProps } from "../types/TextInput.types";
+import { FileUploaderProps } from "../types/FileUploader.types";
 
-function TextInput(props: TextInputProps): JSX.Element {
+function FileUploader(props: FileUploaderProps): JSX.Element {
     const [touched, setTouch] = useState(false);
     const [error, setError] = useState("");
     const [htmlClass, setHtmlClass] = useState("");
@@ -11,8 +11,6 @@ function TextInput(props: TextInputProps): JSX.Element {
     function onValueChanged(event: ChangeEvent<HTMLInputElement>): void {
         let [error, validClass] = ["", ""];
         const elementValue = event.target.value;
-
-
         [error, validClass] = (!elementValue && props.required) ?
             ["Value cannot be empty", "is-invalid"] : ["", "is-valid"];
 
@@ -34,11 +32,10 @@ function TextInput(props: TextInputProps): JSX.Element {
             <label htmlFor={props.id.toString()}>{props.label}</label>
             <input
                 value={props.value}
-                type={props.type}
+                type='file'
                 onChange={onValueChanged}
-                className={`form-control ${props.inputClass} ${htmlClass}`}
-                id={`id_${props.label}`}
-                placeholder={props.placeholder} />
+                className={`form-control ${props.inputClass??""} ${htmlClass}`}
+                id={`id_${props.label}`} />
             {error ?
                 <div className="invalid-feedback">
                     {error}
@@ -48,4 +45,4 @@ function TextInput(props: TextInputProps): JSX.Element {
     );
 }
 
-export default TextInput;
+export default FileUploader;

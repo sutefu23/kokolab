@@ -8,7 +8,7 @@ type LoginRequest = {
 }
 
 const login = async (formData: LoginRequest): Promise<User> => {
-  const { data } = await axios.post('/api/login', formData);
+  const { data } = await axios.post<User>('/api/login', formData);
   return data;
 }
 

@@ -5,7 +5,7 @@ import { login } from "../../store/actions/account.actions";
 import TextInput from "../../common/components/TextInput";
 import axios from 'axios';
 const Login: React.FC = () => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
 
   const [formState, setFormState] = useState({
     email: { error: "", value: "" },
@@ -20,7 +20,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     if(isFormInvalid()) { return; }
     try{
-      const data = await axios.post('/api/login', {email: formState.email.value, password: formState.password.value})
+      await axios.post('/api/login', {email: formState.email.value, password: formState.password.value})
       dispatch(login(formState.email.value));
     }catch(e){
       alert(e)
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   }
 
   function getDisabledClass(): string {
-    let isError: boolean = isFormInvalid() as boolean;
+    const isError: boolean = isFormInvalid() as boolean;
     return isError ? "disabled" : "";
   }
 

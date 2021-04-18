@@ -11,7 +11,7 @@ import { changeSelectedProduct, clearSelectedProduct } from "../../store/actions
 import { IStateType } from "../../store/models/root.interface";
 
 const Orders: React.FC = () => {
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useDispatch();
     const orders: IOrder[] = useSelector((state: IStateType) => state.orders.orders);
     const totalSales: number = orders.reduce((prev, next) => prev + next.totalPrice, 0);
     const totalAmount: number = orders.reduce((prev, next) => prev + next.amount, 0);

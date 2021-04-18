@@ -9,7 +9,7 @@ function NumberInput(props: NumberInputProps): JSX.Element {
 
 
     function onValueChanged(event: ChangeEvent<HTMLInputElement>): void {
-        let elementValue: number = (isNaN(Number(event.target.value))) ? 0 : Number(event.target.value);
+        const elementValue: number = (isNaN(Number(event.target.value))) ? 0 : Number(event.target.value);
         let [error, validClass] = ["", ""];
 
         if (!error) {
@@ -37,7 +37,7 @@ function NumberInput(props: NumberInputProps): JSX.Element {
                 value={props.value}
                 type="number"
                 onChange={onValueChanged}
-                className={`form-control ${props.inputClass} ${htmlClass}`}
+                className={`form-control ${props.inputClass??""} ${htmlClass}`}
                 id={`id_${props.label}`}/>
             {error ?
                 <div className="invalid-feedback">

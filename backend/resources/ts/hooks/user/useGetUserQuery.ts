@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { User } from '../models/user';
 
 const getLoginUser = async (): Promise<User> => {
-  const { data } = await axios.get('/api/users/me');
+  const { data } = await axios.get<User>('/api/users/me');
   return data;
 }
 

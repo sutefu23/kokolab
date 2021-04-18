@@ -1,5 +1,7 @@
+import { OnChangeModel } from "./Form.types";
+
 export type NumberInputProps = {
-    onChange: Function,
+    onChange: (args: OnChangeModel) => void,
     id: string,
     label: string,
     value: number,

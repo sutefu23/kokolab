@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const LeftMenu: React.FC = () => {
 
-    let [leftMenuVisibility, setLeftMenuVisibility] = useState(false);
+    const [leftMenuVisibility, setLeftMenuVisibility] = useState(false);
 
     function changeLeftMenuVisibility() {
         setLeftMenuVisibility(!leftMenuVisibility);

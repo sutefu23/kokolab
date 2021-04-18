@@ -1963,9 +1963,9 @@ __webpack_require__(/*! ./styles/sb-admin-2.min.css */ "./resources/ts/styles/sb
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
-var Login_1 = __importDefault(__webpack_require__(/*! ./components/Account/Login */ "./resources/ts/components/Account/Login.tsx"));
+var Login_1 = __importDefault(__webpack_require__(/*! ./pages/Account/Login */ "./resources/ts/pages/Account/Login.tsx"));
 
-var Admin_1 = __importDefault(__webpack_require__(/*! ./components/Admin/Admin */ "./resources/ts/components/Admin/Admin.tsx"));
+var Admin_1 = __importDefault(__webpack_require__(/*! ./pages/Admin/Admin */ "./resources/ts/pages/Admin/Admin.tsx"));
 
 var PrivateRoute_1 = __webpack_require__(/*! ./common/components/PrivateRoute */ "./resources/ts/common/components/PrivateRoute.tsx");
 
@@ -2041,7 +2041,7 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var Login_1 = __importDefault(__webpack_require__(/*! ../../components/Account/Login */ "./resources/ts/components/Account/Login.tsx"));
+var Login_1 = __importDefault(__webpack_require__(/*! ../../pages/Account/Login */ "./resources/ts/pages/Account/Login.tsx"));
 
 function AccountRoute(_a) {
   var children = _a.children,
@@ -2133,10 +2133,10 @@ function Checkbox(props) {
   function onValueChanged(event) {
     var _a;
 
-    var _b = ["", "", event.target.checked],
+    var _b = ["", ""],
         error = _b[0],
-        validClass = _b[1],
-        elementValue = _b[2];
+        validClass = _b[1];
+    var elementValue = event.target.value;
     _a = !elementValue && props.required ? ["Value has to be checked", "is-invalid"] : ["", "is-valid"], error = _a[0], validClass = _a[1];
     props.onChange({
       value: elementValue,
@@ -2147,7 +2147,7 @@ function Checkbox(props) {
     setTouch(true);
     setError(error);
     setHtmlClass(validClass);
-    setValue(elementValue);
+    setValue(Boolean(elementValue));
   }
 
   return react_1["default"].createElement("div", {
@@ -2291,20 +2291,22 @@ Object.defineProperty(exports, "__esModule", ({
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 function NumberInput(props) {
-  var _a = react_1.useState(false),
-      touched = _a[0],
-      setTouch = _a[1];
+  var _a;
 
-  var _b = react_1.useState(""),
-      error = _b[0],
-      setError = _b[1];
+  var _b = react_1.useState(false),
+      touched = _b[0],
+      setTouch = _b[1];
 
   var _c = react_1.useState(""),
-      htmlClass = _c[0],
-      setHtmlClass = _c[1];
+      error = _c[0],
+      setError = _c[1];
 
-  var _d = react_1.useState(0),
-      setValue = _d[1];
+  var _d = react_1.useState(""),
+      htmlClass = _d[0],
+      setHtmlClass = _d[1];
+
+  var _e = react_1.useState(0),
+      setValue = _e[1];
 
   function onValueChanged(event) {
     var _a, _b;
@@ -2340,7 +2342,7 @@ function NumberInput(props) {
     value: props.value,
     type: "number",
     onChange: onValueChanged,
-    className: "form-control " + props.inputClass + " " + htmlClass,
+    className: "form-control " + ((_a = props.inputClass) !== null && _a !== void 0 ? _a : "") + " " + htmlClass,
     id: "id_" + props.label
   }), error ? react_1["default"].createElement("div", {
     className: "invalid-feedback"
@@ -2406,7 +2408,7 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var Login_1 = __importDefault(__webpack_require__(/*! ../../components/Account/Login */ "./resources/ts/components/Account/Login.tsx"));
+var Login_1 = __importDefault(__webpack_require__(/*! ../../pages/Account/Login */ "./resources/ts/pages/Account/Login.tsx"));
 
 function PrivateRoute(_a) {
   var children = _a.children,
@@ -2495,10 +2497,10 @@ function SelectInput(props) {
   function onValueChanged(event) {
     var _a;
 
-    var _b = ["", "", event.target.value],
+    var _b = ["", ""],
         error = _b[0],
-        validClass = _b[1],
-        elementValue = _b[2];
+        validClass = _b[1];
+    var elementValue = event.target.value;
     _a = !elementValue && props.required ? ["Value has to be selected", "is-invalid"] : ["", "is-valid"], error = _a[0], validClass = _a[1];
     props.onChange({
       value: elementValue,
@@ -2604,10 +2606,10 @@ function TextInput(props) {
   function onValueChanged(event) {
     var _a, _b;
 
-    var _c = ["", "", event.target.value],
+    var _c = ["", ""],
         error = _c[0],
-        validClass = _c[1],
-        elementValue = _c[2];
+        validClass = _c[1];
+    var elementValue = event.target.value;
     _a = !elementValue && props.required ? ["Value cannot be empty", "is-invalid"] : ["", "is-valid"], error = _a[0], validClass = _a[1];
 
     if (!error) {
@@ -2691,10 +2693,93 @@ exports.default = TopCard;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Account/Login.tsx":
-/*!***************************************************!*\
-  !*** ./resources/ts/components/Account/Login.tsx ***!
-  \***************************************************/
+/***/ "./resources/ts/index.tsx":
+/*!********************************!*\
+  !*** ./resources/ts/index.tsx ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
+
+__webpack_require__(/*! ./bootstrap */ "./resources/ts/bootstrap.js");
+
+__webpack_require__(/*! ./index.css */ "./resources/ts/index.css");
+
+var App_1 = __importDefault(__webpack_require__(/*! ./App */ "./resources/ts/App.tsx"));
+
+var serviceWorker = __importStar(__webpack_require__(/*! ./serviceWorker */ "./resources/ts/serviceWorker.ts"));
+
+__webpack_require__(/*! ../../node_modules/bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
+
+__webpack_require__(/*! @fortawesome/fontawesome-free/css/all.min.css */ "./node_modules/@fortawesome/fontawesome-free/css/all.min.css");
+
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var store_1 = __importDefault(__webpack_require__(/*! ./store/store */ "./resources/ts/store/store.ts"));
+
+react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
+  store: store_1["default"]
+}, react_1["default"].createElement(App_1["default"], null)), document.getElementById('app')); // f you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// learn more about service workers: https://bit.ly/CRA-PWA
+
+serviceWorker.unregister();
+
+/***/ }),
+
+/***/ "./resources/ts/pages/Account/Login.tsx":
+/*!**********************************************!*\
+  !*** ./resources/ts/pages/Account/Login.tsx ***!
+  \**********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2940,7 +3025,7 @@ var Login = function Login() {
 
   function submit(e) {
     return __awaiter(this, void 0, void 0, function () {
-      var data, e_1;
+      var e_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -2965,7 +3050,8 @@ var Login = function Login() {
             })];
 
           case 2:
-            data = _a.sent();
+            _a.sent();
+
             dispatch(account_actions_1.login(formState.email.value));
             return [3
             /*break*/
@@ -3065,10 +3151,10 @@ exports.default = Login;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Admin/Admin.tsx":
-/*!*************************************************!*\
-  !*** ./resources/ts/components/Admin/Admin.tsx ***!
-  \*************************************************/
+/***/ "./resources/ts/pages/Admin/Admin.tsx":
+/*!********************************************!*\
+  !*** ./resources/ts/pages/Admin/Admin.tsx ***!
+  \********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3120,19 +3206,19 @@ Object.defineProperty(exports, "__esModule", ({
 
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var LeftMenu_1 = __importDefault(__webpack_require__(/*! ../LeftMenu/LeftMenu */ "./resources/ts/components/LeftMenu/LeftMenu.tsx"));
+var LeftMenu_1 = __importDefault(__webpack_require__(/*! ../LeftMenu/LeftMenu */ "./resources/ts/pages/LeftMenu/LeftMenu.tsx"));
 
-var TopMenu_1 = __importDefault(__webpack_require__(/*! ../TopMenu/TopMenu */ "./resources/ts/components/TopMenu/TopMenu.tsx"));
+var TopMenu_1 = __importDefault(__webpack_require__(/*! ../TopMenu/TopMenu */ "./resources/ts/pages/TopMenu/TopMenu.tsx"));
 
 var react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 
-var Users_1 = __importDefault(__webpack_require__(/*! ../Users/Users */ "./resources/ts/components/Users/Users.tsx"));
+var Users_1 = __importDefault(__webpack_require__(/*! ../Users/Users */ "./resources/ts/pages/Users/Users.tsx"));
 
-var Products_1 = __importDefault(__webpack_require__(/*! ../Products/Products */ "./resources/ts/components/Products/Products.tsx"));
+var Products_1 = __importDefault(__webpack_require__(/*! ../Products/Products */ "./resources/ts/pages/Products/Products.tsx"));
 
-var Orders_1 = __importDefault(__webpack_require__(/*! ../Orders/Orders */ "./resources/ts/components/Orders/Orders.tsx"));
+var Orders_1 = __importDefault(__webpack_require__(/*! ../Orders/Orders */ "./resources/ts/pages/Orders/Orders.tsx"));
 
-var Home_1 = __importDefault(__webpack_require__(/*! ../Home/Home */ "./resources/ts/components/Home/Home.tsx"));
+var Home_1 = __importDefault(__webpack_require__(/*! ../Home/Home */ "./resources/ts/pages/Home/Home.tsx"));
 
 var Notification_1 = __importDefault(__webpack_require__(/*! ../../common/components/Notification */ "./resources/ts/common/components/Notification.tsx"));
 
@@ -3159,10 +3245,10 @@ exports.default = Admin;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Home/Home.tsx":
-/*!***********************************************!*\
-  !*** ./resources/ts/components/Home/Home.tsx ***!
-  \***********************************************/
+/***/ "./resources/ts/pages/Home/Home.tsx":
+/*!******************************************!*\
+  !*** ./resources/ts/pages/Home/Home.tsx ***!
+  \******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3220,9 +3306,9 @@ var root_actions_1 = __webpack_require__(/*! ../../store/actions/root.actions */
 
 var TopCard_1 = __importDefault(__webpack_require__(/*! ../../common/components/TopCard */ "./resources/ts/common/components/TopCard.tsx"));
 
-var ProductsList_1 = __importDefault(__webpack_require__(/*! ../Products/ProductsList */ "./resources/ts/components/Products/ProductsList.tsx"));
+var ProductsList_1 = __importDefault(__webpack_require__(/*! ../Products/ProductsList */ "./resources/ts/pages/Products/ProductsList.tsx"));
 
-var OrderList_1 = __importDefault(__webpack_require__(/*! ../Orders/OrderList */ "./resources/ts/components/Orders/OrderList.tsx"));
+var OrderList_1 = __importDefault(__webpack_require__(/*! ../Orders/OrderList */ "./resources/ts/pages/Orders/OrderList.tsx"));
 
 var Home = function Home() {
   var products = react_redux_1.useSelector(function (state) {
@@ -3308,10 +3394,10 @@ exports.default = Home;
 
 /***/ }),
 
-/***/ "./resources/ts/components/LeftMenu/LeftMenu.tsx":
-/*!*******************************************************!*\
-  !*** ./resources/ts/components/LeftMenu/LeftMenu.tsx ***!
-  \*******************************************************/
+/***/ "./resources/ts/pages/LeftMenu/LeftMenu.tsx":
+/*!**************************************************!*\
+  !*** ./resources/ts/pages/LeftMenu/LeftMenu.tsx ***!
+  \**************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3440,10 +3526,10 @@ exports.default = LeftMenu;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Orders/OrderForm.tsx":
-/*!******************************************************!*\
-  !*** ./resources/ts/components/Orders/OrderForm.tsx ***!
-  \******************************************************/
+/***/ "./resources/ts/pages/Orders/OrderForm.tsx":
+/*!*************************************************!*\
+  !*** ./resources/ts/pages/Orders/OrderForm.tsx ***!
+  \*************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3682,10 +3768,10 @@ exports.default = OrderForm;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Orders/OrderList.tsx":
-/*!******************************************************!*\
-  !*** ./resources/ts/components/Orders/OrderList.tsx ***!
-  \******************************************************/
+/***/ "./resources/ts/pages/Orders/OrderList.tsx":
+/*!*************************************************!*\
+  !*** ./resources/ts/pages/Orders/OrderList.tsx ***!
+  \*************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3740,10 +3826,10 @@ exports.default = OrderList;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Orders/Orders.tsx":
-/*!***************************************************!*\
-  !*** ./resources/ts/components/Orders/Orders.tsx ***!
-  \***************************************************/
+/***/ "./resources/ts/pages/Orders/Orders.tsx":
+/*!**********************************************!*\
+  !*** ./resources/ts/pages/Orders/Orders.tsx ***!
+  \**********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3799,13 +3885,13 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 
 var root_actions_1 = __webpack_require__(/*! ../../store/actions/root.actions */ "./resources/ts/store/actions/root.actions.ts");
 
-var OrderList_1 = __importDefault(__webpack_require__(/*! ./OrderList */ "./resources/ts/components/Orders/OrderList.tsx"));
+var OrderList_1 = __importDefault(__webpack_require__(/*! ./OrderList */ "./resources/ts/pages/Orders/OrderList.tsx"));
 
 var TopCard_1 = __importDefault(__webpack_require__(/*! ../../common/components/TopCard */ "./resources/ts/common/components/TopCard.tsx"));
 
-var OrderForm_1 = __importDefault(__webpack_require__(/*! ./OrderForm */ "./resources/ts/components/Orders/OrderForm.tsx"));
+var OrderForm_1 = __importDefault(__webpack_require__(/*! ./OrderForm */ "./resources/ts/pages/Orders/OrderForm.tsx"));
 
-var ProductsList_1 = __importDefault(__webpack_require__(/*! ../Products/ProductsList */ "./resources/ts/components/Products/ProductsList.tsx"));
+var ProductsList_1 = __importDefault(__webpack_require__(/*! ../Products/ProductsList */ "./resources/ts/pages/Products/ProductsList.tsx"));
 
 var products_action_1 = __webpack_require__(/*! ../../store/actions/products.action */ "./resources/ts/store/actions/products.action.ts");
 
@@ -3878,10 +3964,10 @@ exports.default = Orders;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Products/Products.tsx":
-/*!*******************************************************!*\
-  !*** ./resources/ts/components/Products/Products.tsx ***!
-  \*******************************************************/
+/***/ "./resources/ts/pages/Products/Products.tsx":
+/*!**************************************************!*\
+  !*** ./resources/ts/pages/Products/Products.tsx ***!
+  \**************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3933,13 +4019,13 @@ Object.defineProperty(exports, "__esModule", ({
 
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var ProductsList_1 = __importDefault(__webpack_require__(/*! ./ProductsList */ "./resources/ts/components/Products/ProductsList.tsx"));
+var ProductsList_1 = __importDefault(__webpack_require__(/*! ./ProductsList */ "./resources/ts/pages/Products/ProductsList.tsx"));
 
-var ProductsForm_1 = __importDefault(__webpack_require__(/*! ./ProductsForm */ "./resources/ts/components/Products/ProductsForm.tsx"));
+var ProductsForm_1 = __importDefault(__webpack_require__(/*! ./ProductsForm */ "./resources/ts/pages/Products/ProductsForm.tsx"));
 
 var TopCard_1 = __importDefault(__webpack_require__(/*! ../../common/components/TopCard */ "./resources/ts/common/components/TopCard.tsx"));
 
-__webpack_require__(/*! ./Products.css */ "./resources/ts/components/Products/Products.css");
+__webpack_require__(/*! ./Products.css */ "./resources/ts/pages/Products/Products.css");
 
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
@@ -4080,10 +4166,10 @@ exports.default = Products;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Products/ProductsForm.tsx":
-/*!***********************************************************!*\
-  !*** ./resources/ts/components/Products/ProductsForm.tsx ***!
-  \***********************************************************/
+/***/ "./resources/ts/pages/Products/ProductsForm.tsx":
+/*!******************************************************!*\
+  !*** ./resources/ts/pages/Products/ProductsForm.tsx ***!
+  \******************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4356,10 +4442,10 @@ exports.default = ProductForm;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Products/ProductsList.tsx":
-/*!***********************************************************!*\
-  !*** ./resources/ts/components/Products/ProductsList.tsx ***!
-  \***********************************************************/
+/***/ "./resources/ts/pages/Products/ProductsList.tsx":
+/*!******************************************************!*\
+  !*** ./resources/ts/pages/Products/ProductsList.tsx ***!
+  \******************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4421,10 +4507,10 @@ exports.default = ProductList;
 
 /***/ }),
 
-/***/ "./resources/ts/components/TopMenu/TopMenu.tsx":
-/*!*****************************************************!*\
-  !*** ./resources/ts/components/TopMenu/TopMenu.tsx ***!
-  \*****************************************************/
+/***/ "./resources/ts/pages/TopMenu/TopMenu.tsx":
+/*!************************************************!*\
+  !*** ./resources/ts/pages/TopMenu/TopMenu.tsx ***!
+  \************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4442,9 +4528,9 @@ Object.defineProperty(exports, "__esModule", ({
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var TopMenuAccount_1 = __importDefault(__webpack_require__(/*! ./TopMenuAccount */ "./resources/ts/components/TopMenu/TopMenuAccount.tsx"));
+var TopMenuAccount_1 = __importDefault(__webpack_require__(/*! ./TopMenuAccount */ "./resources/ts/pages/TopMenu/TopMenuAccount.tsx"));
 
-__webpack_require__(/*! ./TopMenu.css */ "./resources/ts/components/TopMenu/TopMenu.css");
+__webpack_require__(/*! ./TopMenu.css */ "./resources/ts/pages/TopMenu/TopMenu.css");
 
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
@@ -4475,10 +4561,10 @@ exports.default = TopMenu;
 
 /***/ }),
 
-/***/ "./resources/ts/components/TopMenu/TopMenuAccount.tsx":
-/*!************************************************************!*\
-  !*** ./resources/ts/components/TopMenu/TopMenuAccount.tsx ***!
-  \************************************************************/
+/***/ "./resources/ts/pages/TopMenu/TopMenuAccount.tsx":
+/*!*******************************************************!*\
+  !*** ./resources/ts/pages/TopMenu/TopMenuAccount.tsx ***!
+  \*******************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4578,10 +4664,10 @@ exports.default = TopMenuAccount;
 
 /***/ }),
 
-/***/ "./resources/ts/components/Users/Users.tsx":
-/*!*************************************************!*\
-  !*** ./resources/ts/components/Users/Users.tsx ***!
-  \*************************************************/
+/***/ "./resources/ts/pages/Users/Users.tsx":
+/*!********************************************!*\
+  !*** ./resources/ts/pages/Users/Users.tsx ***!
+  \********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4765,89 +4851,6 @@ var Users = function Users() {
 };
 
 exports.default = Users;
-
-/***/ }),
-
-/***/ "./resources/ts/index.tsx":
-/*!********************************!*\
-  !*** ./resources/ts/index.tsx ***!
-  \********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  Object.defineProperty(o, k2, {
-    enumerable: true,
-    get: function get() {
-      return m[k];
-    }
-  });
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  }
-
-  __setModuleDefault(result, mod);
-
-  return result;
-};
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
-
-__webpack_require__(/*! ./bootstrap */ "./resources/ts/bootstrap.js");
-
-__webpack_require__(/*! ./index.css */ "./resources/ts/index.css");
-
-var App_1 = __importDefault(__webpack_require__(/*! ./App */ "./resources/ts/App.tsx"));
-
-var serviceWorker = __importStar(__webpack_require__(/*! ./serviceWorker */ "./resources/ts/serviceWorker.ts"));
-
-__webpack_require__(/*! ../../node_modules/bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-
-__webpack_require__(/*! @fortawesome/fontawesome-free/css/all.min.css */ "./node_modules/@fortawesome/fontawesome-free/css/all.min.css");
-
-var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-
-var store_1 = __importDefault(__webpack_require__(/*! ./store/store */ "./resources/ts/store/store.ts"));
-
-react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
-  store: store_1["default"]
-}, react_1["default"].createElement(App_1["default"], null)), document.getElementById('app')); // f you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// learn more about service workers: https://bit.ly/CRA-PWA
-
-serviceWorker.unregister();
 
 /***/ }),
 
@@ -10492,10 +10495,35 @@ ___CSS_LOADER_EXPORT___.push([module.id, "body {\n    color: darkslategray;\n}\n
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/Products/Products.css":
-/*!*****************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/Products/Products.css ***!
-  \*****************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/index.css":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/index.css ***!
+  \******************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i);"]);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n  margin: 0;\n  font-family: Nunito, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: darkslategray !important;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/Products/Products.css":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/Products/Products.css ***!
+  \************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10516,10 +10544,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".header-buttons {\n    position: absol
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/TopMenu/TopMenu.css":
-/*!***************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/TopMenu/TopMenu.css ***!
-  \***************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/TopMenu/TopMenu.css":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/TopMenu/TopMenu.css ***!
+  \**********************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10534,31 +10562,6 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, ".white-breadcrumb {\n    background-color: white !important;\n    margin-top: 15px !important;\n}\n\n.portlet {\n    max-height: 350px;\n}", ""]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/index.css":
-/*!******************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/index.css ***!
-  \******************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
-// Imports
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
-___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i);"]);
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n  margin: 0;\n  font-family: Nunito, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: darkslategray !important;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -77304,66 +77307,6 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
-/***/ "./resources/ts/components/Products/Products.css":
-/*!*******************************************************!*\
-  !*** ./resources/ts/components/Products/Products.css ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./Products.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/Products/Products.css");
-
-            
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
-
-/***/ }),
-
-/***/ "./resources/ts/components/TopMenu/TopMenu.css":
-/*!*****************************************************!*\
-  !*** ./resources/ts/components/TopMenu/TopMenu.css ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./TopMenu.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/components/TopMenu/TopMenu.css");
-
-            
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
-
-/***/ }),
-
 /***/ "./resources/ts/index.css":
 /*!********************************!*\
   !*** ./resources/ts/index.css ***!
@@ -77391,6 +77334,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_index_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
+/***/ "./resources/ts/pages/Products/Products.css":
+/*!**************************************************!*\
+  !*** ./resources/ts/pages/Products/Products.css ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./Products.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/Products/Products.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_Products_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
+/***/ "./resources/ts/pages/TopMenu/TopMenu.css":
+/*!************************************************!*\
+  !*** ./resources/ts/pages/TopMenu/TopMenu.css ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./TopMenu.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[7].oneOf[1].use[2]!./resources/ts/pages/TopMenu/TopMenu.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_7_oneOf_1_use_2_TopMenu_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
 
 /***/ }),
 

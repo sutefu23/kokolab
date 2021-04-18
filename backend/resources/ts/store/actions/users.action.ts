@@ -1,7 +1,7 @@
 import { IUser } from "../models/user.interface";
 
-export const ADD_ADMIN: string = "ADD_ADMIN";
-export const REMOVE_ADMIN: string = "REMOVE_ADMIN";
+export const ADD_ADMIN = "ADD_ADMIN";
+export const REMOVE_ADMIN = "REMOVE_ADMIN";
 
 export function addAdmin(user: IUser): IAddAdminActionType {
     return { type: ADD_ADMIN, user: user };

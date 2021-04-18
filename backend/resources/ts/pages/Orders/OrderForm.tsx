@@ -65,7 +65,7 @@ const OrderForm: React.FC = () => {
                 name: formState.name.value,
                 amount: formState.amount.value,
                 totalPrice: formState.totalPrice.value,
-                product: formState.product.value as IProduct
+                product: formState.product.value
             }));
 
             dispatch(addNotification("Order added", `Order ${formState.name.value} added by you`));
@@ -82,7 +82,7 @@ const OrderForm: React.FC = () => {
     }
 
     function getDisabledClass(): string {
-        let isError: boolean =  isFormInvalid();
+        const isError: boolean =  isFormInvalid();
         return isError ? "disabled" : "";
     }
 

@@ -1,11 +1,11 @@
-import React, { Dispatch } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IStateType } from "../../store/models/root.interface";
 import { INotification } from "../../store/models/notification.interface";
 import { removeNotification } from "../../store/actions/notifications.action";
 
 const Notifications: React.FC = () => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
   const notifications: INotification[] = useSelector((state: IStateType) =>
     state.notifications.notifications);
 

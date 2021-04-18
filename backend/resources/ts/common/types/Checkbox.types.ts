@@ -1,6 +1,8 @@
+import { OnChangeModel } from "./Form.types";
+
 export type CheckboxProps = {
     required?: boolean,
-    onChange: Function,
+    onChange: (args: OnChangeModel) => void,
     id: string,
     label: string,
     value: boolean,

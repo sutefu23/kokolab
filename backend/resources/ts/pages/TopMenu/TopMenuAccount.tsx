@@ -1,10 +1,10 @@
-import React, { useState, Dispatch } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/actions/account.actions";
 import { IStateType } from "../../store/models/root.interface";
 
 function TopMenuAccount(): JSX.Element {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
   const email: string = useSelector((state: IStateType) => state.account.email);
   const [isShow, setShow] = useState(false);
 

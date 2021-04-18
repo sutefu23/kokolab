@@ -1,11 +1,11 @@
 import { IProduct, ProductModificationStatus } from "../models/product.interface";
-export const ADD_PRODUCT: string = "ADD_PRODUCT";
-export const EDIT_PRODUCT: string = "EDIT_PRODUCT";
-export const REMOVE_PRODUCT: string = "REMOVE_PRODUCT";
-export const CHANGE_PRODUCT_AMOUNT: string = "CHANGE_PRODUCT_AMOUNT";
-export const CHANGE_PRODUCT_PENDING_EDIT: string = "CHANGE_PRODUCT_PENDING_EDIT";
-export const CLEAR_PRODUCT_PENDING_EDIT: string = "CLEAR_PRODUCT_PENDING_EDIT";
-export const SET_MODIFICATION_STATE: string = "SET_MODIFICATION_STATE";
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const EDIT_PRODUCT = "EDIT_PRODUCT";
+export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
+export const CHANGE_PRODUCT_AMOUNT = "CHANGE_PRODUCT_AMOUNT";
+export const CHANGE_PRODUCT_PENDING_EDIT = "CHANGE_PRODUCT_PENDING_EDIT";
+export const CLEAR_PRODUCT_PENDING_EDIT = "CLEAR_PRODUCT_PENDING_EDIT";
+export const SET_MODIFICATION_STATE = "SET_MODIFICATION_STATE";
 
 export function addProduct(product: IProduct): IAddProductActionType {
     return { type: ADD_PRODUCT, product: product };
