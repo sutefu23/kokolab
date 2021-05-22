@@ -10,6 +10,7 @@ import { useQueryClient } from "react-query";
 import useGetUserQuery from "./hooks/user/useGetUserQuery";
 import Loading from "./common/components/Loading";
 
+
 const App: React.FC = () => {
   const queryClient = useQueryClient();
   const { isLoading } = useGetUserQuery({
@@ -23,6 +24,7 @@ const App: React.FC = () => {
   if (isLoading) {
     return <Loading/>
   }
+
   return (
     <div className="App" id="wrapper">
       <Router>

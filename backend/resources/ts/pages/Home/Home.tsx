@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import {  useSelector } from "react-redux";
 import TopCard from "../../common/components/TopCard";
 import OrderList from "../Orders/OrderList";
 
