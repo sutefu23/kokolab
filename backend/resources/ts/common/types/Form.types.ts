@@ -1,4 +1,4 @@
-import { IProduct } from "../../store/models/product.interface";
+import { Order } from "../../models/order";
 
 export type OnChangeModel = {
     value: string | number | boolean,
@@ -20,7 +20,7 @@ export interface IProductFormState {
 
 export  interface IOrderFormState {
     name: IFormStateField<string>;
-    product: IFormStateField<IProduct | null>;
+    product: IFormStateField<Order | null>;
     amount: IFormStateField<number>;
     totalPrice: IFormStateField<number>;
 };

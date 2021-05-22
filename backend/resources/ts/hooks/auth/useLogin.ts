@@ -1,10 +1,11 @@
 import { useQueryClient, UseMutationResult, useMutation } from 'react-query'
 import axios, { AxiosError } from 'axios'
-import { User } from '../models/user'
+import { User } from '../../models/user'
+import { ErrorResponse } from "../../error/response";
 
 type LoginRequest = {
-  email:"" ,
-  password:""
+  email: string ,
+  password: string
 }
 
 const login = async (formData: LoginRequest): Promise<User> => {
@@ -14,7 +15,7 @@ const login = async (formData: LoginRequest): Promise<User> => {
 
 const useLogin = (): UseMutationResult<
   User,
-  AxiosError,
+  AxiosError<ErrorResponse>,
   LoginRequest,
   undefined
 > => {

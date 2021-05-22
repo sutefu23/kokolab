@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IStateType } from "../../store/models/root.interface";
-import { INotification } from "../../store/models/notification.interface";
+import { IStateType } from "../../models/interface/root.interface";
+import { INotification } from "../../models/interface/notification.interface";
 import { removeNotification } from "../../store/actions/notifications.action";
 
 const Notifications: React.FC = () => {
@@ -13,7 +13,7 @@ const Notifications: React.FC = () => {
     dispatch(removeNotification(id));
   }
 
-  const notificationList = notifications.map(notification => {
+  const notificationList = notifications.map((notification) => {
     return (
       <div className="toast" key={`notification_${notification.id}`}>
         <div className="toast-header">

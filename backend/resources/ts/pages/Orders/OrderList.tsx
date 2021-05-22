@@ -1,20 +1,19 @@
 import React, { } from "react";
-import { useSelector } from "react-redux";
-import { IOrder } from "../../store/models/order.interface";
-import { IStateType } from "../../store/models/root.interface";
+import { Order } from "../../models/order"
 
-const OrderList: React.FC = () => {
-    const orders: IOrder[] = useSelector((state: IStateType) => state.orders.orders);
-
-    const orderList: JSX.Element[] = orders.map(order => {
+type OrderListProps = {
+    orders: [Order]
+}
+function OrderList(props: OrderListProps): JSX.Element {
+    const orderList: JSX.Element[] = props.orders.map((order) => {
         return (
             <tr className={`table-row`}
-                key={`order_${order.id}`}>
-                <th scope="row">{order.id}</th>
-                <td>{order.name}</td>
-                <td>{order.product.name}</td>
-                <td>{order.amount}</td>
-                <td>{order.totalPrice}</td>
+                key={`order_${order.reception_number}`}>
+                <th scope="row">{order.reception_number}</th>
+                <td>{order.item_code }</td>
+                <td>{order.product_name}</td>
+                <td>{order.quantity}</td>
+                <td>{order.inclusive_sum}</td>
             </tr>);
     })
 
@@ -23,11 +22,11 @@ const OrderList: React.FC = () => {
             <table className="table">
                 <thead className="thead-light">
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Total price</th>
+                        <th scope="col">受付番号</th>
+                        <th scope="col">商品コード</th>
+                        <th scope="col">商品名</th>
+                        <th scope="col">数量</th>
+                        <th scope="col">合計金額</th>
                     </tr>
                 </thead>
                 <tbody>

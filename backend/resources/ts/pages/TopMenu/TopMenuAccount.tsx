@@ -1,13 +1,21 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/actions/account.actions";
-import { IStateType } from "../../store/models/root.interface";
-
+import { useHistory } from "react-router";
+import { useLogout } from '../../hooks/auth/index'
+import useCurrentUser from "../../hooks/user/useCurrentUser";
 function TopMenuAccount(): JSX.Element {
-  const dispatch = useDispatch();
-  const email: string = useSelector((state: IStateType) => state.account.email);
+  const email: string = useCurrentUser()?.email ?? "";
   const [isShow, setShow] = useState(false);
 
+  const history = useHistory()
+  const { mutate } = useLogout()
+
+  const handleLogout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        history.push('/login')
+      }
+    })
+  }
   return (
 
     <li className="nav-item dropdown no-arrow">
@@ -29,7 +37,7 @@ function TopMenuAccount(): JSX.Element {
       <div className={`dropdown-menu dropdown-menu-right shadow animated--grow-in ${(isShow) ? "show" : ""}`}
         aria-labelledby="userDropdown">
         <a className="dropdown-item"
-        onClick={() => dispatch(logout())}
+        onClick={handleLogout}
         href="# " 
         data-toggle="modal"
         data-target="#logoutModal">

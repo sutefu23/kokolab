@@ -1,39 +1,57 @@
-import React, { useState, FormEvent } from "react";
-import { OnChangeModel } from "../../common/types/Form.types";
-import { useDispatch } from "react-redux";
-import { login } from "../../store/actions/account.actions";
+import React, { useState, useCallback } from "react";
+import { useHistory , useLocation } from 'react-router-dom';
 import TextInput from "../../common/components/TextInput";
-import axios from 'axios';
+import { useLogin } from "../../hooks/auth";
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
 
-  const [formState, setFormState] = useState({
-    email: { error: "", value: "" },
-    password: { error: "", value: "" }
-  });
+  const { error, isLoading, mutate } = useLogin();
 
-  function hasFormValueChanged(model: OnChangeModel): void {
-    setFormState({ ...formState, [model.field]: { error: model.error, value: model.value } });
+  const statusCode = error?.response?.status;
+
+  const history = useHistory();
+  const location = useLocation();
+  
+  const { from } = (location.state as { from: string }) || {
+    from: { pathname: '/'}
   }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  async function submit(e: FormEvent<HTMLFormElement>): Promise<void> {
-    e.preventDefault();
-    if(isFormInvalid()) { return; }
-    try{
-      await axios.post('/api/login', {email: formState.email.value, password: formState.password.value})
-      dispatch(login(formState.email.value));
-    }catch(e){
-      alert(e)
+  const handleChangeEmail = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(event.target.value);
     }
-  }
+  ,[])
 
+  const handleChangePassword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value)
+    }
+  ,[])
+
+  const submit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if(!password || !email) {
+      return;
+    }
+    mutate(
+      {email, password },
+      {
+        onSuccess: () => {
+          history.replace(from)
+        }
+      }
+    );
+    },
+    [email, password, history, from , mutate],
+  );
   function isFormInvalid() {
-    return (formState.email.error || formState.password.error
-      || !formState.email.value || !formState.password.value);
+    return (!email || !password);
   }
 
   function getDisabledClass(): string {
-    const isError: boolean = isFormInvalid() as boolean;
+    const isError: boolean = isFormInvalid() ;
     return isError ? "disabled" : "";
   }
 
@@ -49,15 +67,15 @@ const Login: React.FC = () => {
                 <div className="col-lg-6">
                   <div className="p-5">
                     <div className="text-center">
-                      <h1 className="h4 text-gray-900 mb-4">Welcome!</h1>
+                      <h1 className="h4 text-gray-900 mb-4">Kokolab!</h1>
                     </div>
                     <form className="user" onSubmit={submit}>
                       <div className="form-group">
 
                         <TextInput id="input_email"
                           field="email"
-                          value={formState.email.value}
-                          onChange={hasFormValueChanged}
+                          value={email}
+                          onChange={handleChangeEmail}
                           required={true}
                           maxLength={100}
                           label="Email"
@@ -66,8 +84,8 @@ const Login: React.FC = () => {
                       <div className="form-group">
                         <TextInput id="input_password"
                           field="password"
-                          value={formState.password.value}
-                          onChange={hasFormValueChanged}
+                          value={password}
+                          onChange={handleChangePassword}
                           required={true}
                           maxLength={100}
                           type="password"

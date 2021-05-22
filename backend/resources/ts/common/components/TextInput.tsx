@@ -1,8 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import { TextInputProps } from "../types/TextInput.types";
 
-function TextInput(props: TextInputProps): JSX.Element {
-    const [touched, setTouch] = useState(false);
+const TextInput = (props: TextInputProps): JSX.Element => {
     const [error, setError] = useState("");
     const [htmlClass, setHtmlClass] = useState("");
     const [, setValue] = useState("");
@@ -21,9 +20,8 @@ function TextInput(props: TextInputProps): JSX.Element {
             [`Value can't have more than ${props.maxLength} characters`, "is-invalid"] : ["", "is-valid"];
         }
 
-        props.onChange({ value: elementValue, error: error, touched: touched, field: props.field });
+        props.onChange(event);
 
-        setTouch(true);
         setError(error);
         setHtmlClass(validClass);
         setValue(elementValue);
@@ -36,7 +34,7 @@ function TextInput(props: TextInputProps): JSX.Element {
                 value={props.value}
                 type={props.type}
                 onChange={onValueChanged}
-                className={`form-control ${props.inputClass} ${htmlClass}`}
+                className={`form-control ${props.inputClass ?? ""} ${htmlClass}`}
                 id={`id_${props.label}`}
                 placeholder={props.placeholder} />
             {error ?

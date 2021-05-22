@@ -13,6 +13,7 @@
   "plugins": [
     "react",
     "jest",
+    "react-hooks",
     "@typescript-eslint"
   ],
   "parserOptions": {
@@ -31,5 +32,13 @@
     "jest/globals": true
   },
   "globals": {},
-  "rules": {}
+  "rules": {
+    "arrow-parens":"warn",
+    "arrow-spacing":"warn",
+    "no-console": "warn",
+    "no-sequences":"warn",
+    "no-throw-literal" :"error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
 }

@@ -1,6 +1,6 @@
 import { QueryObserverResult, useQuery, UseQueryOptions } from 'react-query';
 import axios, { AxiosError } from 'axios';
-import { User } from '../models/user';
+import { User } from '../../models/user';
 
 const getLoginUser = async (): Promise<User> => {
   const { data } = await axios.get<User>('/api/users/me');

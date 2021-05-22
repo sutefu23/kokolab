@@ -1,19 +1,18 @@
 import { Route, RouteProps } from "react-router";
 import React from "react";
-import { useSelector } from "react-redux";
-import { IStateType } from "../../store/models/root.interface";
-import { IAccount } from "../../store/models/account.interface";
 import Login from "../../pages/Account/Login";
+import useCurrentUser from "../../hooks/user/useCurrentUser";
 
 
 export function PrivateRoute({ children, ...rest }: RouteProps): JSX.Element {
 
-    const account: IAccount = useSelector((state: IStateType) => state.account);
+    const isLogin: boolean = useCurrentUser() ? true : false;
+
     return (
         <Route
             {...rest}
             render={() =>
-                account.email ? (
+                isLogin ? (
                     children
                 ) : <Login/>
             }

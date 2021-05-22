@@ -1,8 +1,6 @@
-import { OnChangeModel } from "./Form.types";
-
 export type TextInputProps = {
     required: boolean,
-    onChange: (args: OnChangeModel) => void,
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     id: string,
     label: string,
     placeholder: string,

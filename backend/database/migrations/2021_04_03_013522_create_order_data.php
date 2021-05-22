@@ -105,7 +105,7 @@ class CreateOrderData extends Migration
             $table->string('tax_rate_kubun')->comment('税率区分');
             $table->string('tax_rate')->comment('税率');
             $table->string('amazonpay_reference_id')->comment('amazonpayリファレンスid');
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
