@@ -9,8 +9,8 @@ const getLoginUser = async (): Promise<User> => {
 
 const useGetUserQuery = <TData = User>(
   options?: UseQueryOptions<User, AxiosError, TData>
-): QueryObserverResult<TData, AxiosError> => 
-  useQuery('user', getLoginUser, options);
+): QueryObserverResult<TData, AxiosError> =>
+  useQuery('user', getLoginUser, {staleTime: Infinity});
 
 
 

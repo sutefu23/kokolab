@@ -3509,7 +3509,9 @@ var getLoginUser = function getLoginUser() {
 };
 
 var useGetUserQuery = function useGetUserQuery(options) {
-  return react_query_1.useQuery('user', getLoginUser, options);
+  return react_query_1.useQuery('user', getLoginUser, {
+    staleTime: Infinity
+  });
 };
 
 exports.default = useGetUserQuery;

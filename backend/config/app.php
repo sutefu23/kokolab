@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,//table to model generator
         /*
          * Application Service Providers...
          */

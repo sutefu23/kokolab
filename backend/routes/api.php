@@ -20,9 +20,6 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/users/me', 'UserController@show')->name('user');
+Route::get('/users/me', 'UserController@show')->name('me');
 
-Route::get('/user', function ()
-{
-    return Auth::user();
-})->name('user');
+Route::get('/orders', 'OrdersController@index')->name('orders');
