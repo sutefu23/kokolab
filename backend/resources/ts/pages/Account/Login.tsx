@@ -32,6 +32,7 @@ const Login: React.FC = () => {
   const submit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log("submit");
     if(!password || !email) {
       return;
     }

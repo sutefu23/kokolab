@@ -23,3 +23,5 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/users/me', 'UserController@show')->name('me');
 
 Route::get('/orders', 'OrdersController@index')->name('orders');
+
+Route::post('/orders/upload', 'OrdersController@upload')->name('ordersUpload');

@@ -2,19 +2,15 @@ import { useQueryClient, useMutation, UseMutationResult } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { Order } from '../../models/order';
 
-type FormData = {
-  file: Blob
-}
-
-const upload = async (formData: FormData): Promise<Order[]> => {
-  const { data } = await axios.post<Order[]>('/api/upload', formData)
+const upload = async (csv: File): Promise<Order[]> => {
+  const { data } = await axios.post<Order[]>('/api/orders/upload', csv)
   return data  
 }
 
 const useUpload = (): UseMutationResult<
   Order[],
   AxiosError,
-  FormData,
+  File,
   undefined
 > => {
   const queryClient = useQueryClient();

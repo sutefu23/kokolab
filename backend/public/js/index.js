@@ -3265,7 +3265,7 @@ var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
-var upload = function upload(formData) {
+var upload = function upload(csv) {
   return __awaiter(void 0, void 0, void 0, function () {
     var data;
     return __generator(this, function (_a) {
@@ -3273,7 +3273,7 @@ var upload = function upload(formData) {
         case 0:
           return [4
           /*yield*/
-          , axios_1["default"].post('/api/upload', formData)];
+          , axios_1["default"].post('/api/orders/upload', csv)];
 
         case 1:
           data = _a.sent().data;
@@ -3589,7 +3589,15 @@ __webpack_require__(/*! @fortawesome/fontawesome-free/css/all.min.css */ "./node
 
 var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react-query/es/index.js");
 
-var client = new react_query_1.QueryClient();
+var client = new react_query_1.QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 300000
+    }
+  }
+});
 react_dom_1["default"].render(react_1["default"].createElement(react_query_1.QueryClientProvider, {
   client: client
 }, react_1["default"].createElement(App_1["default"], null)), document.getElementById('app')); // f you want your app to work offline and load faster, you can change
@@ -3694,6 +3702,7 @@ var Login = function Login() {
   }, []);
   var submit = react_1.useCallback(function (event) {
     event.preventDefault();
+    console.log("submit");
 
     if (!password || !email) {
       return;
@@ -4204,25 +4213,44 @@ var useUploadCSV_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/u
 var useGetOrders_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useGetOrders */ "./resources/ts/hooks/order/useGetOrders.ts"));
 
 var Orders = function Orders() {
-  var uploadResults = useUploadCSV_1["default"]();
   var queryOrderResults = useGetOrders_1["default"]();
 
-  var _a = react_1.useState(queryOrderResults.data || []),
-      orders = _a[0],
-      setOrders = _a[1];
+  var _a = useUploadCSV_1["default"](),
+      error = _a.error,
+      isLoading = _a.isLoading,
+      mutate = _a.mutate;
 
+  var _b = react_1.useState(queryOrderResults.data || []),
+      orders = _b[0],
+      setOrders = _b[1];
+
+  var _c = react_1.useState(null),
+      file = _c[0],
+      setFile = _c[1];
+
+  var handleChange = react_1.useCallback(function (event) {
+    event.preventDefault();
+    if (!event.target.files) return;
+    setFile(event.target.files[0]);
+  }, [orders]);
   var handleUpload = react_1.useCallback(function (event) {
     event.preventDefault();
-  }, [orders]);
+    if (!file) return;
+    mutate(file, {});
+  }, [file, mutate]);
   return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement("h1", {
     className: "h3 mb-2 text-gray-800"
   }, "\u53D6\u5F15\u30C7\u30FC\u30BF"), react_1["default"].createElement("p", {
     className: "mb-4"
   }, "\u3053\u3061\u3089\u304B\u3089\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044"), react_1["default"].createElement(FileUploder_1["default"], {
     id: "csv_upload",
-    onFileChange: handleUpload,
+    onFileChange: handleChange,
     label: "CSV\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"
-  }), react_1["default"].createElement("div", {
+  }), react_1["default"].createElement("button", {
+    className: "btn btn-primary btn-user btn-block",
+    onClick: handleUpload,
+    type: "submit"
+  }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"), react_1["default"].createElement("div", {
     className: "row"
   }, react_1["default"].createElement(TopCard_1["default"], {
     title: "TOTAL AMOUNT",

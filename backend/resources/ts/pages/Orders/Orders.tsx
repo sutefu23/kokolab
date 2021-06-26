@@ -4,30 +4,50 @@ import TopCard from "../../common/components/TopCard";
 import FileUploader from "../../common/components/FileUploder";
 import useUpload from "../../hooks/order/useUploadCSV";
 import useGetOrdersQuery from "../../hooks/order/useGetOrders";
-import { Order } from "../../models/order";
 
 const Orders: React.FC = () => {
-    const uploadResults = useUpload();
     const queryOrderResults = useGetOrdersQuery();
+    const { error, isLoading, mutate } = useUpload();
     
 
     const [ orders, setOrders ] = useState(queryOrderResults.data || [])
-    const handleUpload = useCallback(
+    const [ file, setFile ] = useState<File|null>(null);
+
+    const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             event.preventDefault();
+            if(!event.target.files) return;
+            setFile(event.target.files[0]);
         },
         [orders],
     )
-        
+    const handleUpload = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            if(!file) return ;
+            mutate(
+                file,
+                {
+                }
+              );
+        },
+        [file, mutate]
+    )
     return (
         <Fragment>
             <h1 className="h3 mb-2 text-gray-800">取引データ</h1>
             <p className="mb-4">こちらからアップロードしてください</p>
             <FileUploader 
                 id="csv_upload"
-                onFileChange={handleUpload}
+                onFileChange={handleChange}
                 label="CSVアップロード"
             ></FileUploader>
+            <button
+            className={`btn btn-primary btn-user btn-block`}
+            onClick={handleUpload}
+            type="submit">
+            アップロード
+            </button>
             <div className="row">
                 <TopCard title="TOTAL AMOUNT" text={orders.length.toString()} icon="calculator" class="danger" />
             </div>

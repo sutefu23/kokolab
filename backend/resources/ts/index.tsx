@@ -9,7 +9,15 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 
-const client = new QueryClient();
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 300000,
+    },
+  },
+});
 ReactDOM.render(
   <QueryClientProvider client={client}>
     <App />
