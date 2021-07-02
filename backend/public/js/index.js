@@ -4119,7 +4119,7 @@ function OrderList(props) {
   var orderList = props.orders.map(function (order) {
     return react_1["default"].createElement("tr", {
       className: "table-row",
-      key: "order_" + order.reception_number
+      key: order.reception_number + "_" + order.item_code
     }, react_1["default"].createElement("th", {
       scope: "row"
     }, order.reception_number), react_1["default"].createElement("td", null, order.item_code), react_1["default"].createElement("td", null, order.product_name), react_1["default"].createElement("td", null, order.quantity), react_1["default"].createElement("td", null, order.inclusive_sum));
@@ -4213,14 +4213,14 @@ var useUploadCSV_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/u
 var useGetOrders_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useGetOrders */ "./resources/ts/hooks/order/useGetOrders.ts"));
 
 var Orders = function Orders() {
-  var queryOrderResults = useGetOrders_1["default"]();
+  var _a = useGetOrders_1["default"](),
+      orderStatus = _a.status,
+      orderData = _a.data,
+      orderErr = _a.error;
 
-  var _a = useUploadCSV_1["default"](),
-      error = _a.error,
-      isLoading = _a.isLoading,
-      mutate = _a.mutate;
+  var mutate = useUploadCSV_1["default"]().mutate;
 
-  var _b = react_1.useState(queryOrderResults.data || []),
+  var _b = react_1.useState(orderData),
       orders = _b[0],
       setOrders = _b[1];
 
@@ -4228,15 +4228,27 @@ var Orders = function Orders() {
       file = _c[0],
       setFile = _c[1];
 
+  react_1.useEffect(function () {
+    if (orderStatus === "success") {
+      setOrders(orderData);
+    }
+  }, [orderStatus, orderData]);
   var handleChange = react_1.useCallback(function (event) {
     event.preventDefault();
     if (!event.target.files) return;
     setFile(event.target.files[0]);
-  }, [orders]);
+  }, []);
   var handleUpload = react_1.useCallback(function (event) {
     event.preventDefault();
     if (!file) return;
-    mutate(file, {});
+    mutate(file, {
+      onError: function onError(error) {
+        alert(error.message);
+      },
+      onSuccess: function onSuccess(orders) {
+        setOrders(orders);
+      }
+    });
   }, [file, mutate]);
   return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement("h1", {
     className: "h3 mb-2 text-gray-800"
@@ -4252,7 +4264,7 @@ var Orders = function Orders() {
     type: "submit"
   }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"), react_1["default"].createElement("div", {
     className: "row"
-  }, react_1["default"].createElement(TopCard_1["default"], {
+  }, orders && react_1["default"].createElement(TopCard_1["default"], {
     title: "TOTAL AMOUNT",
     text: orders.length.toString(),
     icon: "calculator",
@@ -4271,7 +4283,7 @@ var Orders = function Orders() {
     className: "header-buttons"
   })), react_1["default"].createElement("div", {
     className: "card-body"
-  }, orders !== null && orders !== void 0 ? orders : react_1["default"].createElement(OrderList_1["default"], {
+  }, orders && react_1["default"].createElement(OrderList_1["default"], {
     orders: orders
   }))))));
 };

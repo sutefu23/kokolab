@@ -6,12 +6,18 @@ import useUpload from "../../hooks/order/useUploadCSV";
 import useGetOrdersQuery from "../../hooks/order/useGetOrders";
 
 const Orders: React.FC = () => {
-    const queryOrderResults = useGetOrdersQuery();
-    const { error, isLoading, mutate } = useUpload();
+    const { status:orderStatus , data: orderData , error: orderErr } = useGetOrdersQuery();
+    const { mutate } = useUpload();
     
 
-    const [ orders, setOrders ] = useState(queryOrderResults.data || [])
+    const [ orders, setOrders ] = useState<typeof orderData>(orderData)
     const [ file, setFile ] = useState<File|null>(null);
+
+    useEffect(() => {
+        if (orderStatus === "success") {
+            setOrders(orderData);
+        }
+    }, [orderStatus, orderData]);
 
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,15 +25,20 @@ const Orders: React.FC = () => {
             if(!event.target.files) return;
             setFile(event.target.files[0]);
         },
-        [orders],
+        [],
     )
     const handleUpload = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             event.preventDefault();
             if(!file) return ;
             mutate(
-                file,
-                {
+                file,{
+                    onError: (error) => {
+                        alert(error.message);
+                      },
+                    onSuccess: (orders) => {
+                        setOrders(orders);
+                    },
                 }
               );
         },
@@ -49,7 +60,10 @@ const Orders: React.FC = () => {
             アップロード
             </button>
             <div className="row">
-                <TopCard title="TOTAL AMOUNT" text={orders.length.toString()} icon="calculator" class="danger" />
+                {
+                orders && 
+                    <TopCard title="TOTAL AMOUNT" text={orders.length.toString()} icon="calculator" class="danger" />
+                }
             </div>
 
             <div className="row">
@@ -61,7 +75,7 @@ const Orders: React.FC = () => {
                             </div>
                         </div>
                         <div className="card-body">
-                            {orders??
+                            {orders &&
                                 <OrderList orders={orders}/>
                             }
                         </div>

@@ -2,13 +2,13 @@ import React, { } from "react";
 import { Order } from "../../models/order"
 
 type OrderListProps = {
-    orders: [Order]
+    orders: Order[]
 }
 function OrderList(props: OrderListProps): JSX.Element {
     const orderList: JSX.Element[] = props.orders.map((order) => {
         return (
             <tr className={`table-row`}
-                key={`order_${order.reception_number}`}>
+                key={`${order.reception_number}_${order.item_code}`}>
                 <th scope="row">{order.reception_number}</th>
                 <td>{order.item_code }</td>
                 <td>{order.product_name}</td>

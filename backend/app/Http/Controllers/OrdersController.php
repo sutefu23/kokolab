@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orders;
 use Facade\FlareClient\Http\Exceptions\InvalidData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -128,10 +129,11 @@ class OrdersController extends Controller
                 $order->save();
             }
             DB::commit();
-
+            return Orders::all();
         } catch (\Exception $e){
             \Log::error($e);
             DB::rollBack();
+            throw \HttpInvalidParamException("アップロードに失敗しました。");
         } finally {
             $request->flash();
         }
