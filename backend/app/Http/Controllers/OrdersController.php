@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
+use App\Models\ColorConfigs;
 use Facade\FlareClient\Http\Exceptions\InvalidData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,35 @@ class OrdersController extends Controller
     public function index()
     {
         return \App\Models\Orders::all();
+    }
+    public function getColor(Request $request)
+    {
+        return \App\Models\ColorConfigs::all();
+    }
+
+    public function setColor(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            \App\Models\ColorConfigs::query()->delete();
+            $requests = $request->getContent();
+            \Log::debug($requests);
+            $configs = json_decode($requests, true) ?? [];
+            foreach ($configs as $conf){
+                $color_config = new \App\Models\ColorConfigs;
+                $color_config->item_code = $conf['item_code'];
+                $color_config->color = $conf['color'];
+                $color_config->save();
+            }
+            DB::commit();
+            return \App\Models\ColorConfigs::all();
+        } catch (\Exception $e){
+            \Log::error($e);
+            DB::rollBack();
+            throw \Exception("色情報の更新に失敗しました。");
+        } finally {
+            $request->flash();
+        }
     }
 
     public function upload(Request $request)
@@ -133,7 +163,7 @@ class OrdersController extends Controller
         } catch (\Exception $e){
             \Log::error($e);
             DB::rollBack();
-            throw \HttpInvalidParamException("アップロードに失敗しました。");
+            throw \Exception("アップロードに失敗しました。");
         } finally {
             $request->flash();
         }

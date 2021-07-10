@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useCallback, useEffect } from "react";
 import OrderList from "./OrderList";
+import  "./Orders.css";
 import TopCard from "../../common/components/TopCard";
 import FileUploader from "../../common/components/FileUploder";
 import useUpload from "../../hooks/order/useUploadCSV";
@@ -70,7 +71,7 @@ const Orders: React.FC = () => {
                 <div className="col-xl-12 col-lg-12">
                     <div className="card shadow mb-4">
                         <div className="card-header py-3">
-                            <h6 className="m-0 font-weight-bold text-green">Order List</h6>
+                            <h6 className="m-0 font-weight-bold text-green">受注リスト</h6>
                             <div className="header-buttons">
                             </div>
                         </div>

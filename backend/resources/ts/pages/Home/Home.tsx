@@ -29,7 +29,7 @@ const Home: React.FC = () => {
         <div className="col-xl-6 col-lg-6">
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-green">Order list</h6>
+              <h6 className="m-0 font-weight-bold text-green">受注リスト</h6>
             </div>
             <div className="card-body">
               {/* <OrderList /> */}

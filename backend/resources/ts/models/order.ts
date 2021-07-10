@@ -1,3 +1,5 @@
+import { Color } from 'react-color';
+
 export type Order = {
   reception_date : Date //受付日
   reception_time : Date //受付時間
@@ -89,4 +91,9 @@ export type Order = {
   tax_rate_kubun : string //税率区分
   tax_rate : string //税率
   amazonpay_reference_id : string //amazonpayリファレンスid
+}
+
+export type OrderColorMaster = {
+  item_code : string //商品コード
+  color: Color
 }

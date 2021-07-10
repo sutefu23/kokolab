@@ -25,3 +25,7 @@ Route::get('/users/me', 'UserController@show')->name('me');
 Route::get('/orders', 'OrdersController@index')->name('orders');
 
 Route::post('/orders/upload', 'OrdersController@upload')->name('ordersUpload');
+
+Route::get('/orders/color', 'OrdersController@getColor')->name('orderGetColor');
+
+Route::post('/orders/color', 'OrdersController@setColor')->name('orderSetColor');

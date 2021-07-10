@@ -1,0 +1,10 @@
+.table-responsive {
+  overflow: auto;
+}
+.table-row{
+  position: relative;
+  cursor: pointer;
+}
+.table-row:nth-child(2n):hover{
+  opacity: 0.7;
+}
