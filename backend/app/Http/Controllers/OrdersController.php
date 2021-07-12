@@ -19,6 +19,11 @@ class OrdersController extends Controller
     {
         return \App\Models\Orders::all();
     }
+
+    public function getPickingList(Request $request){
+
+    }
+
     public function getColor(Request $request)
     {
         return \App\Models\ColorConfigs::all();
