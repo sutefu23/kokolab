@@ -31,3 +31,5 @@ Route::get('/orders/color', 'OrdersController@getColor')->name('orderGetColor');
 Route::post('/orders/color', 'OrdersController@setColor')->name('orderSetColor');
 
 Route::get('/orders/group_by_item', 'OrdersController@groupByItem')->name('ordersGroupByItem');
+
+Route::get('/orders/download', 'OrdersController@download')->name('ordersDownload');
