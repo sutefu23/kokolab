@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const location = useLocation();
   
   const { from } = (location.state as { from: string }) || {
-    from: { pathname: '/'}
+    from: { pathname: '/orders'}
   }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +32,6 @@ const Login: React.FC = () => {
   const submit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("submit");
     if(!password || !email) {
       return;
     }

@@ -4425,7 +4425,7 @@ var Login = function Login() {
   var location = react_router_dom_1.useLocation();
   var from = (location.state || {
     from: {
-      pathname: '/'
+      pathname: '/orders'
     }
   }).from;
 
@@ -4445,7 +4445,6 @@ var Login = function Login() {
   }, []);
   var submit = react_1.useCallback(function (event) {
     event.preventDefault();
-    console.log("submit");
 
     if (!password || !email) {
       return;
@@ -4602,8 +4601,6 @@ var react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/rea
 
 var Orders_1 = __importDefault(__webpack_require__(/*! ../Orders/Orders */ "./resources/ts/pages/Orders/Orders.tsx"));
 
-var Home_1 = __importDefault(__webpack_require__(/*! ../Home/Home */ "./resources/ts/pages/Home/Home.tsx"));
-
 var Notification_1 = __importDefault(__webpack_require__(/*! ../../common/components/Notification */ "./resources/ts/common/components/Notification.tsx"));
 
 var Admin = function Admin() {
@@ -4616,92 +4613,10 @@ var Admin = function Admin() {
     className: "container-fluid"
   }, react_1["default"].createElement(react_router_1.Switch, null, react_1["default"].createElement(react_router_1.Route, {
     path: "/orders"
-  }, react_1["default"].createElement(Orders_1["default"], null)), react_1["default"].createElement(react_router_1.Route, {
-    path: "/"
-  }, react_1["default"].createElement(Home_1["default"], null)))))));
+  }, react_1["default"].createElement(Orders_1["default"], null)))))));
 };
 
 exports.default = Admin;
-
-/***/ }),
-
-/***/ "./resources/ts/pages/Home/Home.tsx":
-/*!******************************************!*\
-  !*** ./resources/ts/pages/Home/Home.tsx ***!
-  \******************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  Object.defineProperty(o, k2, {
-    enumerable: true,
-    get: function get() {
-      return m[k];
-    }
-  });
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  }
-
-  __setModuleDefault(result, mod);
-
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var Home = function Home() {
-  // const orders: IOrder[] = useSelector((state: IStateType) => state.orders.orders);
-  // const totalSales: number = orders.reduce((prev, next) => prev + next.totalPrice, 0);
-  // const totalOrderAmount: number = orders.reduce((prev, next) => prev + next.amount, 0);
-  return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement("h1", {
-    className: "h3 mb-2 text-gray-800"
-  }, "Dashboard"), react_1["default"].createElement("p", {
-    className: "mb-4"
-  }, "Summary and overview of our admin stuff here"), react_1["default"].createElement("div", {
-    className: "row"
-  }), react_1["default"].createElement("div", {
-    className: "row"
-  }), react_1["default"].createElement("div", {
-    className: "row"
-  }, react_1["default"].createElement("div", {
-    className: "col-xl-6 col-lg-6"
-  }, react_1["default"].createElement("div", {
-    className: "card shadow mb-4"
-  }, react_1["default"].createElement("div", {
-    className: "card-header py-3"
-  }, react_1["default"].createElement("h6", {
-    className: "m-0 font-weight-bold text-green"
-  }, "\u53D7\u6CE8\u30EA\u30B9\u30C8")), react_1["default"].createElement("div", {
-    className: "card-body"
-  })))));
-};
-
-exports.default = Home;
 
 /***/ }),
 
@@ -4796,39 +4711,10 @@ var LeftMenu = function LeftMenu() {
     className: "nav-item active"
   }, react_1["default"].createElement(react_router_dom_1.Link, {
     className: "nav-link",
-    to: "Home"
+    to: "Orders"
   }, react_1["default"].createElement("i", {
     className: "fas fa-fw fa-tachometer-alt"
   }), react_1["default"].createElement("span", null, "Dashboard"))), react_1["default"].createElement("hr", {
-    className: "sidebar-divider"
-  }), react_1["default"].createElement("div", {
-    className: "sidebar-heading"
-  }, "Warehouse"), react_1["default"].createElement("li", {
-    className: "nav-item"
-  }, react_1["default"].createElement(react_router_dom_1.Link, {
-    className: "nav-link",
-    to: "/products"
-  }, react_1["default"].createElement("i", {
-    className: "fas fa-fw fa-warehouse"
-  }), react_1["default"].createElement("span", null, "Products"))), react_1["default"].createElement("li", {
-    className: "nav-item"
-  }, react_1["default"].createElement(react_router_dom_1.Link, {
-    className: "nav-link",
-    to: "/orders"
-  }, react_1["default"].createElement("i", {
-    className: "fas fa-fw fa-dollar-sign"
-  }), react_1["default"].createElement("span", null, "Orders"))), react_1["default"].createElement("hr", {
-    className: "sidebar-divider"
-  }), react_1["default"].createElement("div", {
-    className: "sidebar-heading"
-  }, "Admin"), react_1["default"].createElement("li", {
-    className: "nav-item"
-  }, react_1["default"].createElement(react_router_dom_1.Link, {
-    className: "nav-link",
-    to: "/users"
-  }, react_1["default"].createElement("i", {
-    className: "fas fa-fw fa-user"
-  }), react_1["default"].createElement("span", null, "Users"))), react_1["default"].createElement("hr", {
     className: "sidebar-divider d-none d-md-block"
   })));
 };

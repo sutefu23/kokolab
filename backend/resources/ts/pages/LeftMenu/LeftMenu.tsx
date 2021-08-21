@@ -35,44 +35,13 @@ const LeftMenu: React.FC = () => {
 
                 <li className="nav-item active">
 
-                    <Link className="nav-link" to="Home">
+                    <Link className="nav-link" to="Orders">
                         <i className="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </Link>
                 </li>
 
-                <hr className="sidebar-divider" />
-                <div className="sidebar-heading">
-                    Warehouse
-                </div>
-
-                <li className="nav-item">
-                    <Link className="nav-link" to={`/products`}>
-                        <i className="fas fa-fw fa-warehouse"></i>
-                        <span>Products</span>
-                    </Link>
-                </li>
-
-                <li className="nav-item">
-                    <Link className="nav-link" to={`/orders`}>
-                        <i className="fas fa-fw fa-dollar-sign"></i>
-                        <span>Orders</span>
-                    </Link>
-                </li>
-
-                <hr className="sidebar-divider" />
-
-                <div className="sidebar-heading">
-                    Admin
-                </div>
-
-
-                <li className="nav-item">
-                    <Link className="nav-link" to={`/users`}>
-                        <i className="fas fa-fw fa-user"></i>
-                        <span>Users</span>
-                    </Link>
-                </li>
+       
 
                 <hr className="sidebar-divider d-none d-md-block" />
             </ul>
