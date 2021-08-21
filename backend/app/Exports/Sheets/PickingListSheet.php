@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class InvoiceSheet implements FromCollection, WithMapping, WithHeadings, WithTitle, WithEvents, ShouldAutoSize
+class PickingListSheet implements FromCollection, WithMapping, WithHeadings, WithTitle, WithEvents, ShouldAutoSize
 {
 
     use KokolabStylize;

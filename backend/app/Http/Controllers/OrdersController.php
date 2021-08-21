@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
-use App\Exports\InvoiceExport;
+use App\Exports\PickingListExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +20,7 @@ class OrdersController extends Controller
     }
 
     public function download(Request $request){
-        return (new InvoiceExport())->download('invoices.xlsx');
+        return (new PickingListExport())->download('pickinglist.xlsx');
     }
 
     public function getColor(Request $request)

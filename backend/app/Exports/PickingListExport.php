@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Exportable;
 
 
-class InvoiceExport implements WithMultipleSheets
+class PickingListExport implements WithMultipleSheets
 {
     use Exportable;
 
@@ -16,7 +16,7 @@ class InvoiceExport implements WithMultipleSheets
     public function sheets(): array
     {
 
-        $sheets[] = new Sheets\InvoiceSheet();
+        $sheets[] = new Sheets\PickingListSheet();
         $sheets[] = new Sheets\ItemGroupSheet();
 
         return $sheets;
