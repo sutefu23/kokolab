@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
-use App\Models\ColorConfigs;
-use Facade\FlareClient\Http\Exceptions\InvalidData;
+use App\Exports\InvoiceExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,11 +16,11 @@ class OrdersController extends Controller
 
     public function index()
     {
-        return \App\Models\Orders::all();
+        return Orders::all();
     }
 
-    public function getPickingList(Request $request){
-
+    public function download(Request $request){
+        return (new InvoiceExport())->download('invoices.xlsx');
     }
 
     public function getColor(Request $request)
@@ -52,6 +51,11 @@ class OrdersController extends Controller
         } finally {
             $request->flash();
         }
+    }
+
+    public function groupByItem(Request $request)
+    {
+        return Orders::groupByItem();
     }
 
     public function upload(Request $request)

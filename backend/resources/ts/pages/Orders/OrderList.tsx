@@ -71,7 +71,7 @@ function OrderList(props: OrderListProps): JSX.Element {
                 </td>
                 <td>{order.product_name}</td>
                 <td>{order.quantity}</td>
-                <td>{order.inclusive_sum}</td>
+                <td>{order.inclusive_sum?.toLocaleString()}</td>
             </tr>);
     })
 

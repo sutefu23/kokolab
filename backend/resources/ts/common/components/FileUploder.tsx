@@ -5,6 +5,7 @@ export type FileUploaderProps = {
     id: string,
     label: string,
     inputClass?: string,
+    className?:string,
     error?: string
 };
 
@@ -16,7 +17,7 @@ function FileUploader(props: FileUploaderProps): JSX.Element {
     }
 
     return (
-        <div>
+        <div className={props.className}>
             <label htmlFor={props.id.toString()}>{props.label}</label>
             <input
                 type='file'

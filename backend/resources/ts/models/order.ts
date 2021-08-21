@@ -97,3 +97,9 @@ export type OrderColorMaster = {
   item_code : string //商品コード
   color: Color
 }
+
+export type OrderGroupByItem = {
+  item_code : string
+  product_name: string
+  quantity: number
+}

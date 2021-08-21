@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property integer $id
@@ -114,4 +115,8 @@ class Orders extends Model
      */
     protected $fillable = ['reception_date', 'reception_time', 'reception_number', 'branch_no_issue', 'item_code', 'product_name', 'unit_price', 'quantity', 'subtotal', 'shipping_fee', 'fee', 'discount', 'inclusive_sum', 'postal_code', 'prefectures', 'city', 'town_address', 'building', 'full_name', 'delivery_target_phone_number', 'email', 'payment_methods', 'communication_field_from_guest', 'customer_type', 'feces_type', 'delivery_specified_date', 'delivery_specified_time', 'document_per_product', 'document_per_order', 'customer_id', 'shipping_date', 'return_date', 'ad_number', 'store_kubun', 'order_status', 'communication_field_in_store', 'communication_field_to_guest', 'fixed_term_times', 'fixed_term_delivery_cycle', 'next_delivery_plan_latest', 'shipment_number', 'customer_before_migration', 'order_before_migration', 'customer_memo', 'shipping_fee_2', 'fee_2', 'discount_2', 'inclusive_sum_2', 'delivery_due_date', 'next_delivery_expected_date', 'orderer_postal_code', 'orderer_prefectures', 'orderer_city', 'orderer_town_address', 'orderer_building', 'orderer_full_name', 'orderer_phone_number', 'orderer_name_family_name', 'orderer_name_name', 'orderer_name_kana_family_name', 'orderer_name_kana_name', 'delivery_target_name_family_name', 'delivery_target_name_name', 'delivery_target_name_kana_family_name', 'delivery_target_name_kana_name', 'birthdate', 'sex', 'zeus_order_number', 'zeus_ip_code', 'coupon_code', 'fixed_term_order_date', 'order_id', 'gmo_order_number', 'fixed_term_order_number', 'manager_memo', 'guest_representative', 'guest_to_communicating_field_fixed_term', 'guest_from_communicating_field_fixed_term', 'store_within_communicating_field_fixed_term', 'administrator_memo_fixed_term', 'np_trading_id', 'np_franchised_store_id', 'internal_tax_etc', 'fixed_term_delivery_cycle_2', 'order_representative', 'fixed_term_delivery_status', 'pause_date', 'tax_rate_kubun', 'tax_rate', 'amazonpay_reference_id', 'created_at', 'updated_at'];
 
+    public static function groupByItem()
+    {
+        return self::select(DB::raw("item_code, product_name, sum(quantity) as quantity"))->orderBy('item_code')->groupBy(["item_code", "product_name"])->get();
+    }
 }

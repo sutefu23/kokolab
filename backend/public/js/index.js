@@ -2206,7 +2206,9 @@ function FileUploader(props) {
     props.onFileChange(event);
   }
 
-  return react_1["default"].createElement("div", null, react_1["default"].createElement("label", {
+  return react_1["default"].createElement("div", {
+    className: props.className
+  }, react_1["default"].createElement("label", {
     htmlFor: props.id.toString()
   }, props.label), react_1["default"].createElement("input", {
     type: 'file',
@@ -3250,6 +3252,200 @@ var useGetOrderColorQuery = function useGetOrderColorQuery(options) {
 };
 
 exports.default = useGetOrderColorQuery;
+
+/***/ }),
+
+/***/ "./resources/ts/hooks/order/useGetGroupByItem.ts":
+/*!*******************************************************!*\
+  !*** ./resources/ts/hooks/order/useGetGroupByItem.ts ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react-query/es/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var getGroupByItem = function getGroupByItem() {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].get('/api/orders/group_by_item')];
+
+        case 1:
+          data = _a.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+var useGetGroupByItemQuery = function useGetGroupByItemQuery(options) {
+  return react_query_1.useQuery('groupByItem', getGroupByItem, options);
+};
+
+exports.default = useGetGroupByItemQuery;
 
 /***/ }),
 
@@ -4641,6 +4837,102 @@ exports.default = LeftMenu;
 
 /***/ }),
 
+/***/ "./resources/ts/pages/Orders/OrderGroup.tsx":
+/*!**************************************************!*\
+  !*** ./resources/ts/pages/Orders/OrderGroup.tsx ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var order_1 = __webpack_require__(/*! ../../hooks/order */ "./resources/ts/hooks/order/index.ts");
+
+function OrderGroup(props) {
+  var _a = order_1.useGetColorMaster(),
+      getColorQueryStatus = _a.status,
+      colorMasterQueryData = _a.data;
+
+  var _b = react_1.useState(colorMasterQueryData),
+      colorMaster = _b[0],
+      setColorMaster = _b[1];
+
+  react_1.useEffect(function () {
+    if (getColorQueryStatus === "success") {
+      setColorMaster(colorMasterQueryData);
+    }
+  }, [getColorQueryStatus, colorMasterQueryData]);
+  var orderGroup = props.groups.map(function (item) {
+    var _a, _b;
+
+    return react_1["default"].createElement("tr", {
+      className: "table-row",
+      style: {
+        backgroundColor: (_b = (_a = colorMaster === null || colorMaster === void 0 ? void 0 : colorMaster.find(function (m) {
+          return m.item_code === item.item_code;
+        })) === null || _a === void 0 ? void 0 : _a.color) === null || _b === void 0 ? void 0 : _b.toString()
+      },
+      key: "" + item.item_code,
+      "data-item-code": item.item_code
+    }, react_1["default"].createElement("td", null, item.product_name), react_1["default"].createElement("td", null, item.quantity));
+  });
+  return react_1["default"].createElement("div", {
+    className: "table-responsive portlet"
+  }, react_1["default"].createElement("table", {
+    className: "table"
+  }, react_1["default"].createElement("thead", {
+    className: "thead-light"
+  }, react_1["default"].createElement("tr", null, react_1["default"].createElement("th", {
+    scope: "col"
+  }, "\u5546\u54C1\u540D"), react_1["default"].createElement("th", {
+    scope: "col"
+  }, "\u51FA\u8377\u6570"))), react_1["default"].createElement("tbody", null, orderGroup)));
+}
+
+exports.default = OrderGroup;
+
+/***/ }),
+
 /***/ "./resources/ts/pages/Orders/OrderList.tsx":
 /*!*************************************************!*\
   !*** ./resources/ts/pages/Orders/OrderList.tsx ***!
@@ -4771,7 +5063,7 @@ function OrderList(props) {
   };
   var cover = {};
   var orderList = props.orders.map(function (order) {
-    var _a, _b;
+    var _a, _b, _c;
 
     return react_1["default"].createElement("tr", {
       className: "table-row",
@@ -4785,7 +5077,7 @@ function OrderList(props) {
       onClick: handleClick
     }, react_1["default"].createElement("th", {
       scope: "row"
-    }, order.reception_number), react_1["default"].createElement("td", null, order.item_code), react_1["default"].createElement("td", null, order.product_name), react_1["default"].createElement("td", null, order.quantity), react_1["default"].createElement("td", null, order.inclusive_sum));
+    }, order.reception_number), react_1["default"].createElement("td", null, order.item_code), react_1["default"].createElement("td", null, order.product_name), react_1["default"].createElement("td", null, order.quantity), react_1["default"].createElement("td", null, (_c = order.inclusive_sum) === null || _c === void 0 ? void 0 : _c.toLocaleString()));
   });
   return react_1["default"].createElement("div", {
     className: "table-responsive portlet"
@@ -4874,6 +5166,8 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 
 var OrderList_1 = __importDefault(__webpack_require__(/*! ./OrderList */ "./resources/ts/pages/Orders/OrderList.tsx"));
 
+var OrderGroup_1 = __importDefault(__webpack_require__(/*! ./OrderGroup */ "./resources/ts/pages/Orders/OrderGroup.tsx"));
+
 __webpack_require__(/*! ./Orders.css */ "./resources/ts/pages/Orders/Orders.css");
 
 var TopCard_1 = __importDefault(__webpack_require__(/*! ../../common/components/TopCard */ "./resources/ts/common/components/TopCard.tsx"));
@@ -4884,27 +5178,54 @@ var useUploadCSV_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/u
 
 var useGetOrders_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useGetOrders */ "./resources/ts/hooks/order/useGetOrders.ts"));
 
+var useGetGroupByItem_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useGetGroupByItem */ "./resources/ts/hooks/order/useGetGroupByItem.ts"));
+
+var Tabs = {
+  ITEM_LIST: 'ITEM_LIST',
+  ITEM_GROUP: 'ITEM_GROUP'
+};
+
 var Orders = function Orders() {
-  var _a = useGetOrders_1["default"](),
-      orderStatus = _a.status,
-      orderData = _a.data,
-      orderErr = _a.error;
+  var _a, _b;
+
+  var _c = useGetOrders_1["default"](),
+      orderStatus = _c.status,
+      orderData = _c.data,
+      orderErr = _c.error;
+
+  var _d = useGetGroupByItem_1["default"](),
+      groupStatus = _d.status,
+      groupData = _d.data,
+      groupErr = _d.error;
 
   var mutate = useUploadCSV_1["default"]().mutate;
 
-  var _b = react_1.useState(orderData),
-      orders = _b[0],
-      setOrders = _b[1];
+  var _e = react_1.useState(orderData),
+      orders = _e[0],
+      setOrders = _e[1];
 
-  var _c = react_1.useState(null),
-      file = _c[0],
-      setFile = _c[1];
+  var _f = react_1.useState(groupData),
+      groups = _f[0],
+      setGroups = _f[1];
+
+  var _g = react_1.useState(null),
+      file = _g[0],
+      setFile = _g[1];
+
+  var _h = react_1.useState(Tabs.ITEM_LIST),
+      tab = _h[0],
+      setTab = _h[1];
 
   react_1.useEffect(function () {
     if (orderStatus === "success") {
       setOrders(orderData);
     }
   }, [orderStatus, orderData]);
+  react_1.useEffect(function () {
+    if (groupStatus === "success") {
+      setGroups(groupData);
+    }
+  }, [groupStatus, groupData]);
   var handleChange = react_1.useCallback(function (event) {
     event.preventDefault();
     if (!event.target.files) return;
@@ -4912,7 +5233,12 @@ var Orders = function Orders() {
   }, []);
   var handleUpload = react_1.useCallback(function (event) {
     event.preventDefault();
-    if (!file) return;
+
+    if (!file) {
+      alert("ファイルを選択してください。");
+      return;
+    }
+
     mutate(file, {
       onError: function onError(error) {
         alert(error.message);
@@ -4922,41 +5248,76 @@ var Orders = function Orders() {
       }
     });
   }, [file, mutate]);
+  var orderSum = react_1.useCallback(function () {
+    return orders === null || orders === void 0 ? void 0 : orders.reduce(function (acc, val) {
+      return acc + val.inclusive_sum;
+    }, 0);
+  }, [orders]);
   return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement("h1", {
     className: "h3 mb-2 text-gray-800"
   }, "\u53D6\u5F15\u30C7\u30FC\u30BF"), react_1["default"].createElement("p", {
     className: "mb-4"
-  }, "\u3053\u3061\u3089\u304B\u3089\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044"), react_1["default"].createElement(FileUploder_1["default"], {
+  }, "\u3053\u3061\u3089\u304B\u3089\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044"), react_1["default"].createElement("div", {
+    className: "row mb-4"
+  }, react_1["default"].createElement(FileUploder_1["default"], {
     id: "csv_upload",
+    className: "col",
+    inputClass: "pb-2",
     onFileChange: handleChange,
     label: "CSV\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"
   }), react_1["default"].createElement("button", {
-    className: "btn btn-primary btn-user btn-block",
+    className: "btn btn-info btn-block col mt-4",
     onClick: handleUpload,
     type: "submit"
-  }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"), react_1["default"].createElement("div", {
+  }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9")), react_1["default"].createElement("a", {
+    href: "/api/orders/download",
+    className: "btn btn-success mb-4",
+    target: "_blank"
+  }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9"), react_1["default"].createElement("div", {
     className: "row"
-  }, orders && react_1["default"].createElement(TopCard_1["default"], {
-    title: "TOTAL AMOUNT",
+  }, orders && react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement(TopCard_1["default"], {
+    title: "\u53D7\u6CE8\u65E5",
+    text: orders[0].reception_date.toString(),
+    icon: "calendar-alt",
+    "class": "success"
+  }), react_1["default"].createElement(TopCard_1["default"], {
+    title: "\u53D7\u6CE8\u6570",
     text: orders.length.toString(),
-    icon: "calculator",
+    icon: "list-ol",
     "class": "danger"
-  })), react_1["default"].createElement("div", {
+  }), react_1["default"].createElement(TopCard_1["default"], {
+    title: "\u5408\u8A08\u984D",
+    text: (_b = (_a = orderSum()) === null || _a === void 0 ? void 0 : _a.toLocaleString()) !== null && _b !== void 0 ? _b : "0",
+    icon: "calculator",
+    "class": "success"
+  }))), react_1["default"].createElement("div", {
     className: "row"
   }, react_1["default"].createElement("div", {
     className: "col-xl-12 col-lg-12"
   }, react_1["default"].createElement("div", {
     className: "card shadow mb-4"
-  }, react_1["default"].createElement("div", {
-    className: "card-header py-3"
-  }, react_1["default"].createElement("h6", {
-    className: "m-0 font-weight-bold text-green"
-  }, "\u53D7\u6CE8\u30EA\u30B9\u30C8"), react_1["default"].createElement("div", {
-    className: "header-buttons"
-  })), react_1["default"].createElement("div", {
+  }, react_1["default"].createElement("ul", {
+    className: "nav nav-tabs"
+  }, react_1["default"].createElement("li", {
+    className: "card-header col-6 nav-item"
+  }, react_1["default"].createElement("a", {
+    className: "btn m-0 font-weight-bold nav-link " + (tab === Tabs.ITEM_LIST ? "active" : 'text-green'),
+    onClick: function onClick() {
+      return setTab(Tabs.ITEM_LIST);
+    }
+  }, "\u53D7\u6CE8\u30EA\u30B9\u30C8")), react_1["default"].createElement("li", {
+    className: "card-header col-6 nav-item"
+  }, react_1["default"].createElement("a", {
+    className: "btn m-0 font-weight-bold nav-link " + (tab === Tabs.ITEM_GROUP ? "active" : 'text-green'),
+    onClick: function onClick() {
+      return setTab(Tabs.ITEM_GROUP);
+    }
+  }, "\u96C6\u8A08\u30EA\u30B9\u30C8"))), react_1["default"].createElement("div", {
     className: "card-body"
-  }, orders && react_1["default"].createElement(OrderList_1["default"], {
+  }, orders && tab == Tabs.ITEM_LIST && react_1["default"].createElement(OrderList_1["default"], {
     orders: orders
+  }), groups && tab == Tabs.ITEM_GROUP && react_1["default"].createElement(OrderGroup_1["default"], {
+    groups: groups
   }))))));
 };
 
@@ -9931,7 +10292,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".white-breadcrumb {\r\n    background-color: white !important;\r\n    margin-top: 15px !important;\r\n}\r\n\r\n.portlet {\r\n    max-height: 350px;\r\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".white-breadcrumb {\r\n    background-color: white !important;\r\n    margin-top: 15px !important;\r\n}\r\n\r\n.portlet {\r\n    max-height: 500px;\r\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
