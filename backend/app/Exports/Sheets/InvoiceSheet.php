@@ -41,15 +41,14 @@ class InvoiceSheet implements FromCollection, WithMapping, WithHeadings, WithTit
      */
     public function collection(): Collection
     {
-        return DB::table('orders')->orderByRaw(
-            "CASE
-            　　WHEN payment_methods = 'NP(後払いwiz)' AND customer_type = '新規客' THEN 1
-            　　WHEN payment_methods = 'NP(後払いwiz)' AND customer_type = '既存客' THEN 2
-            　　WHEN payment_methods = 'クレジットカード' AND customer_type = '新規客' THEN 3
-            　　WHEN payment_methods = 'クレジットカード' AND customer_type = '既存客' THEN 4
-            　　ELSE 9999
-            　　END"
-        )->get();
+        return DB::table('orders')->orderByRaw("
+        CASE
+            WHEN payment_methods = 'NP(後払いwiz)' AND customer_type = '新規客' THEN 1
+            WHEN payment_methods = 'NP(後払いwiz)' AND customer_type = '既存客' THEN 2
+            WHEN payment_methods = 'クレジットカード' AND customer_type = '新規客' THEN 3
+            WHEN payment_methods = 'クレジットカード' AND customer_type = '既存客' THEN 4
+            ELSE 9999
+        END")->get();
     }
     /**
      *

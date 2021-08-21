@@ -34,7 +34,6 @@ class OrdersController extends Controller
         try {
             \App\Models\ColorConfigs::query()->delete();
             $requests = $request->getContent();
-            \Log::debug($requests);
             $configs = json_decode($requests, true) ?? [];
             foreach ($configs as $conf){
                 $color_config = new \App\Models\ColorConfigs;
