@@ -2296,52 +2296,94 @@ exports.default = Loding;
 "use strict";
 
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
 };
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var Notifications = function Notifications() {
-  // const dispatch = useDispatch();
-  // const notifications: INotification[] = useSelector((state: IStateType) =>
-  //   state.notifications.notifications);
-  // function closeNotification(id: number) {
-  //   dispatch(removeNotification(id));
-  // }
-  // const notificationList = notifications.map((notification) => {
-  //   return (
-  //     <div className="toast" key={`notification_${notification.id}`}>
-  //       <div className="toast-header">
-  //         <i className="fas fa-fw fa-bell"></i>
-  //         <strong className="mr-auto">{notification.title}</strong>
-  //         <small>{notification.date.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}</small>
-  //         <button type="button"
-  //           className="ml-2 mb-1 close"
-  //           data-dismiss="toast"
-  //           aria-label="Close"
-  //           onClick={() => closeNotification(notification.id)}>
-  //           <span aria-hidden="true">&times;</span>
-  //         </button>
-  //       </div>
-  //       <div className="toast-body">
-  //         {notification.text}
-  //       </div>
-  //     </div>
-  //   )
-  // });
+function Notification(props) {
+  var _a = react_1.useState("none"),
+      display = _a[0],
+      setDisplay = _a[1];
+
+  var date = react_1.useState(new Date())[0];
+  react_1.useEffect(function () {
+    props.isShow ? setDisplay("block") : setDisplay("none");
+    var hideTimeout = setTimeout(function () {
+      return setDisplay("none");
+    }, 3000);
+    return function () {
+      clearTimeout(hideTimeout);
+    };
+  }, [props.isShow]);
   return react_1["default"].createElement("div", {
-    className: "toast-wrapper"
-  });
-};
+    className: "toast-wrapper",
+    style: {
+      display: display
+    }
+  }, react_1["default"].createElement("div", {
+    className: "toast",
+    key: "notification"
+  }, react_1["default"].createElement("div", {
+    className: "toast-header"
+  }, react_1["default"].createElement("i", {
+    className: "fas fa-fw fa-bell"
+  }), react_1["default"].createElement("strong", {
+    className: "mr-auto"
+  }, props.title), react_1["default"].createElement("small", null, date.toLocaleTimeString(navigator.language, {
+    hour: '2-digit',
+    minute: '2-digit'
+  })), react_1["default"].createElement("button", {
+    type: "button",
+    className: "ml-2 mb-1 close",
+    "data-dismiss": "toast",
+    "aria-label": "Close",
+    onClick: function onClick() {
+      return setDisplay("none");
+    }
+  }, react_1["default"].createElement("span", {
+    "aria-hidden": "true"
+  }, "\xD7"))), react_1["default"].createElement("div", {
+    className: "toast-body"
+  }, props.text)));
+}
 
-exports.default = Notifications;
+exports.default = Notification;
 
 /***/ }),
 
@@ -4425,7 +4467,7 @@ var Login = function Login() {
   var location = react_router_dom_1.useLocation();
   var from = (location.state || {
     from: {
-      pathname: '/orders'
+      pathname: '/Orders'
     }
   }).from;
 
@@ -4601,10 +4643,8 @@ var react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/rea
 
 var Orders_1 = __importDefault(__webpack_require__(/*! ../Orders/Orders */ "./resources/ts/pages/Orders/Orders.tsx"));
 
-var Notification_1 = __importDefault(__webpack_require__(/*! ../../common/components/Notification */ "./resources/ts/common/components/Notification.tsx"));
-
 var Admin = function Admin() {
-  return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement(Notification_1["default"], null), react_1["default"].createElement(LeftMenu_1["default"], null), react_1["default"].createElement("div", {
+  return react_1["default"].createElement(react_1.Fragment, null, react_1["default"].createElement(LeftMenu_1["default"], null), react_1["default"].createElement("div", {
     id: "content-wrapper",
     className: "d-flex flex-column"
   }, react_1["default"].createElement("div", {
@@ -4612,7 +4652,7 @@ var Admin = function Admin() {
   }, react_1["default"].createElement(TopMenu_1["default"], null), react_1["default"].createElement("div", {
     className: "container-fluid"
   }, react_1["default"].createElement(react_router_1.Switch, null, react_1["default"].createElement(react_router_1.Route, {
-    path: "/orders"
+    path: "/"
   }, react_1["default"].createElement(Orders_1["default"], null)))))));
 };
 
@@ -4705,7 +4745,7 @@ var LeftMenu = function LeftMenu() {
     className: "fas fa-bolt"
   })), react_1["default"].createElement("div", {
     className: "sidebar-brand-text mx-3"
-  }, "REACT ", react_1["default"].createElement("sup", null, "Admin"))), react_1["default"].createElement("hr", {
+  }, "\u30B3\u30B3\u30E9\u30DC ", react_1["default"].createElement("sup", null, "Admin"))), react_1["default"].createElement("hr", {
     className: "sidebar-divider my-0"
   }), react_1["default"].createElement("li", {
     className: "nav-item active"
@@ -4714,7 +4754,7 @@ var LeftMenu = function LeftMenu() {
     to: "Orders"
   }, react_1["default"].createElement("i", {
     className: "fas fa-fw fa-tachometer-alt"
-  }), react_1["default"].createElement("span", null, "Dashboard"))), react_1["default"].createElement("hr", {
+  }), react_1["default"].createElement("span", null, "\u53D7\u6CE8\u7BA1\u7406"))), react_1["default"].createElement("hr", {
     className: "sidebar-divider d-none d-md-block"
   })));
 };
@@ -5060,6 +5100,8 @@ var TopCard_1 = __importDefault(__webpack_require__(/*! ../../common/components/
 
 var FileUploder_1 = __importDefault(__webpack_require__(/*! ../../common/components/FileUploder */ "./resources/ts/common/components/FileUploder.tsx"));
 
+var Notification_1 = __importDefault(__webpack_require__(/*! ../../common/components/Notification */ "./resources/ts/common/components/Notification.tsx"));
+
 var useUploadCSV_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useUploadCSV */ "./resources/ts/hooks/order/useUploadCSV.ts"));
 
 var useGetOrders_1 = __importDefault(__webpack_require__(/*! ../../hooks/order/useGetOrders */ "./resources/ts/hooks/order/useGetOrders.ts"));
@@ -5086,21 +5128,25 @@ var Orders = function Orders() {
 
   var mutate = useUploadCSV_1["default"]().mutate;
 
-  var _e = react_1.useState(orderData),
-      orders = _e[0],
-      setOrders = _e[1];
+  var _e = react_1.useState(false),
+      displayAlert = _e[0],
+      setDisplayAlert = _e[1];
 
-  var _f = react_1.useState(groupData),
-      groups = _f[0],
-      setGroups = _f[1];
+  var _f = react_1.useState(orderData),
+      orders = _f[0],
+      setOrders = _f[1];
 
-  var _g = react_1.useState(null),
-      file = _g[0],
-      setFile = _g[1];
+  var _g = react_1.useState(groupData),
+      groups = _g[0],
+      setGroups = _g[1];
 
-  var _h = react_1.useState(Tabs.ITEM_LIST),
-      tab = _h[0],
-      setTab = _h[1];
+  var _h = react_1.useState(null),
+      file = _h[0],
+      setFile = _h[1];
+
+  var _j = react_1.useState(Tabs.ITEM_LIST),
+      tab = _j[0],
+      setTab = _j[1];
 
   react_1.useEffect(function () {
     if (orderStatus === "success") {
@@ -5131,6 +5177,8 @@ var Orders = function Orders() {
       },
       onSuccess: function onSuccess(orders) {
         setOrders(orders);
+        setFile(null);
+        setDisplayAlert(true);
       }
     });
   }, [file, mutate]);
@@ -5143,7 +5191,11 @@ var Orders = function Orders() {
     className: "h3 mb-2 text-gray-800"
   }, "\u53D6\u5F15\u30C7\u30FC\u30BF"), react_1["default"].createElement("p", {
     className: "mb-4"
-  }, "\u3053\u3061\u3089\u304B\u3089\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044"), react_1["default"].createElement("div", {
+  }, "\u3053\u3061\u3089\u304B\u3089\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044"), react_1["default"].createElement(Notification_1["default"], {
+    title: "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u307E\u3057\u305F\u3002",
+    text: "\u660E\u7D30\u3092\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u307E\u3057\u305F\u3002",
+    isShow: displayAlert
+  }), react_1["default"].createElement("div", {
     className: "row mb-4"
   }, react_1["default"].createElement(FileUploder_1["default"], {
     id: "csv_upload",
@@ -5155,11 +5207,7 @@ var Orders = function Orders() {
     className: "btn btn-info btn-block col mt-4",
     onClick: handleUpload,
     type: "submit"
-  }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9")), react_1["default"].createElement("a", {
-    href: "/api/orders/download",
-    className: "btn btn-success mb-4",
-    target: "_blank"
-  }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9"), react_1["default"].createElement("div", {
+  }, "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9")), react_1["default"].createElement("div", {
     className: "row"
   }, orders && react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement(TopCard_1["default"], {
     title: "\u53D7\u6CE8\u65E5",
@@ -5204,7 +5252,15 @@ var Orders = function Orders() {
     orders: orders
   }), groups && tab == Tabs.ITEM_GROUP && react_1["default"].createElement(OrderGroup_1["default"], {
     groups: groups
-  }))))));
+  }))))), orders && react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("a", {
+    href: "/api/orders/download/pickingList",
+    className: "btn btn-success mb-4",
+    target: "_blank"
+  }, "\u30D4\u30C3\u30AD\u30F3\u30B0\u30EA\u30B9\u30C8"), react_1["default"].createElement("a", {
+    href: "/api/orders/download/invoice",
+    className: "btn btn-success ml-4 mb-4",
+    target: "_blank"
+  }, "\u7D0D\u54C1\u66F8")));
 };
 
 exports.default = Orders;

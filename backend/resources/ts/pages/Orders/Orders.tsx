@@ -4,6 +4,7 @@ import OrderGroup from "./OrderGroup";
 import  "./Orders.css";
 import TopCard from "../../common/components/TopCard";
 import FileUploader from "../../common/components/FileUploder";
+import Notification from "../../common/components/Notification";
 import useUpload from "../../hooks/order/useUploadCSV";
 import useGetOrdersQuery from "../../hooks/order/useGetOrders";
 import useGetGroupByItem from "../../hooks/order/useGetGroupByItem";
@@ -17,7 +18,8 @@ const Orders: React.FC = () => {
     const { status:orderStatus , data: orderData , error: orderErr } = useGetOrdersQuery();
     const { status:groupStatus , data: groupData , error: groupErr } = useGetGroupByItem();
 
-    const { mutate } = useUpload();    
+    const { mutate } = useUpload();
+    const [ displayAlert, setDisplayAlert ] = useState<boolean>(false)
 
     const [ orders, setOrders ] = useState<typeof orderData>(orderData)
     const [ groups, setGroups ] = useState<typeof groupData>(groupData)
@@ -51,14 +53,16 @@ const Orders: React.FC = () => {
             if(!file) {
                 alert("ファイルを選択してください。")
                 return
-            } 
+            }
             mutate(
                 file,{
                     onError: (error) => {
                         alert(error.message);
                       },
                     onSuccess: (orders) => {
-                        setOrders(orders);
+                        setOrders(orders)
+                        setFile(null)
+                        setDisplayAlert(true)
                     },
                 }
               );
@@ -77,8 +81,9 @@ const Orders: React.FC = () => {
         <Fragment>
             <h1 className="h3 mb-2 text-gray-800">取引データ</h1>
             <p className="mb-4">こちらからアップロードしてください</p>
+            <Notification title="アップロードしました。" text="明細をアップロードしました。" isShow={displayAlert}></Notification>
             <div className="row mb-4">
-                <FileUploader 
+                <FileUploader
                     id="csv_upload"
                     className="col"
                     inputClass="pb-2"
@@ -93,11 +98,9 @@ const Orders: React.FC = () => {
                 </button>
             </div>
 
-            <a href="/api/orders/download" className="btn btn-success mb-4" target="_blank">ダウンロード</a>
-
             <div className="row">
                 {
-                orders && 
+                orders &&
                     <React.Fragment>
                         <TopCard title="受注日" text={orders[0].reception_date.toString()} icon="calendar-alt" class="success" />
                         <TopCard title="受注数" text={orders.length.toString()} icon="list-ol" class="danger" />
@@ -129,7 +132,12 @@ const Orders: React.FC = () => {
                 </div>
             </div>
 
-
+            {orders &&
+            <React.Fragment>
+                <a href="/api/orders/download/pickingList" className="btn btn-success mb-4" target="_blank">ピッキングリスト</a>
+                <a href="/api/orders/download/invoice" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
+            </React.Fragment>
+            }
         </Fragment>
     )
 }

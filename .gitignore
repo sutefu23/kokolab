@@ -9,3 +9,4 @@ backend/package-lock.json
 backend/composer.lock
 backend/public/js/app.js
 
+.env.prod

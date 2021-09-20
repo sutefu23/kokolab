@@ -19,10 +19,6 @@ class OrdersController extends Controller
         return Orders::all();
     }
 
-    public function download(Request $request){
-        return (new PickingListExport())->download('pickinglist.xlsx');
-    }
-
     public function getColor(Request $request)
     {
         return \App\Models\ColorConfigs::all();
@@ -71,12 +67,11 @@ class OrdersController extends Controller
 
             foreach ($csv_body as $row) {
                 $columns = explode(',', $row);
-
                 $order = new \App\Models\Orders;
-
+                if(count($columns) <= 1 ) continue;//最後のカンマが空の1行とみなされることがあるため
                 $order->reception_date	=	empty($columns[0])?null:$columns[0];
                 $order->reception_time	=	empty($columns[1])?null:$columns[1];
-                $order->reception_number	=	$columns[2];
+                $order->reception_number	=	empty($columns[2])?null:$columns[2];
                 $order->branch_no_issue	=	empty($columns[3])?null:$columns[3];
                 $order->item_code	=	$columns[4];
                 $order->product_name	=	$columns[5];
@@ -170,8 +165,8 @@ class OrdersController extends Controller
             return Orders::all();
         } catch (\Exception $e){
             \Log::error($e);
+            abort(400, '更新に失敗しました。');
             DB::rollBack();
-            throw \Exception("アップロードに失敗しました。");
         } finally {
             $request->flash();
         }
