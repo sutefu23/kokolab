@@ -102,7 +102,7 @@ const Orders: React.FC = () => {
                 {
                 orders &&
                     <React.Fragment>
-                        <TopCard title="受注日" text={orders[0].reception_date.toString()} icon="calendar-alt" class="success" />
+                        <TopCard title="受注日" text={orders[0]?.reception_date.toString()} icon="calendar-alt" class="success" />
                         <TopCard title="受注数" text={orders.length.toString()} icon="list-ol" class="danger" />
                         <TopCard title="合計額" text={orderSum()?.toLocaleString()??"0"} icon="calculator" class="success" />
                     </React.Fragment>
