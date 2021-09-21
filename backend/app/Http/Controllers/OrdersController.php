@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use App\Exports\PickingListExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
@@ -66,11 +67,12 @@ class OrdersController extends Controller
             \App\Models\Orders::query()->delete();
 
             foreach ($csv_body as $row) {
+                $row = str_replace('"','',$row);
                 $columns = explode(',', $row);
                 $order = new \App\Models\Orders;
                 if(count($columns) <= 1 ) continue;//最後のカンマが空の1行とみなされることがあるため
-                $order->reception_date	=	empty($columns[0])?null:$columns[0];
-                $order->reception_time	=	empty($columns[1])?null:$columns[1];
+                $order->reception_date	=	empty($columns[0])?null:Carbon::parse($columns[0])->format("Y-m-d");
+                $order->reception_time	=	empty($columns[1])?null:Carbon::parse($columns[1])->format("G:i:s");
                 $order->reception_number	=	empty($columns[2])?null:$columns[2];
                 $order->branch_no_issue	=	empty($columns[3])?null:$columns[3];
                 $order->item_code	=	$columns[4];
@@ -94,13 +96,13 @@ class OrdersController extends Controller
                 $order->communication_field_from_guest	=	$columns[22];
                 $order->customer_type	=	$columns[23];
                 $order->feces_type	=	$columns[24];
-                $order->delivery_specified_date	=	empty($columns[25])?null:$columns[25];
+                $order->delivery_specified_date	=	empty($columns[25])?null:Carbon::parse($columns[25])->format("Y-m-d");
                 $order->delivery_specified_time	=	empty($columns[26])||$columns[26]=='指定なし'?null:$columns[26];
                 $order->document_per_product	=	$columns[27];
                 $order->document_per_order	=	$columns[28];
                 $order->customer_id	=	$columns[29];
-                $order->shipping_date	=	empty($columns[30])?null:$columns[30];
-                $order->return_date	=	empty($columns[31])?null:$columns[31];
+                $order->shipping_date	=	empty($columns[30])?null:Carbon::parse($columns[30])->format("Y-m-d");
+                $order->return_date	=	empty($columns[31])?null:Carbon::parse($columns[31])->format("Y-m-d");
                 $order->ad_number	=	$columns[32];
                 $order->store_kubun	=	$columns[33];
                 $order->order_status	=	$columns[34];
@@ -117,8 +119,8 @@ class OrdersController extends Controller
                 $order->fee_2	=	empty($columns[45])?null:$columns[45];
                 $order->discount_2	=	empty($columns[46])?null:$columns[46];
                 $order->inclusive_sum_2	=	empty($columns[47])?null:$columns[47];
-                $order->delivery_due_date	=	empty($columns[48])?null:$columns[48];
-                $order->next_delivery_expected_date	=	empty($columns[49])?null:$columns[49];
+                $order->delivery_due_date	=	empty($columns[48])?null:Carbon::parse($columns[48])->format("Y-m-d");
+                $order->next_delivery_expected_date	=	empty($columns[49])?null:Carbon::parse($columns[49])->format("Y-m-d");
                 $order->orderer_postal_code	=	$columns[50];
                 $order->orderer_prefectures	=	$columns[51];
                 $order->orderer_city	=	$columns[52];
@@ -134,12 +136,12 @@ class OrdersController extends Controller
                 $order->delivery_target_name_name	=	$columns[62];
                 $order->delivery_target_name_kana_family_name	=	$columns[63];
                 $order->delivery_target_name_kana_name	=	$columns[64];
-                $order->birthdate	=	empty($columns[65])?null:$columns[65];
+                $order->birthdate	=	empty($columns[65])?null:Carbon::parse($columns[65])->format("Y-m-d");
                 $order->sex	=	$columns[66];
                 $order->zeus_order_number	=	$columns[67];
                 $order->zeus_ip_code	=	$columns[68];
                 $order->coupon_code	=	$columns[69];
-                $order->fixed_term_order_date	=	empty($columns[70])?null:$columns[70];
+                $order->fixed_term_order_date	=	empty($columns[70])?null:Carbon::parse($columns[70])->format("Y-m-d");
                 $order->order_id	=	$columns[71];
                 $order->gmo_order_number	=	$columns[72];
                 $order->fixed_term_order_number	=	$columns[73];
@@ -155,7 +157,7 @@ class OrdersController extends Controller
                 $order->fixed_term_delivery_cycle_2	=	$columns[83];
                 $order->order_representative	=	$columns[84];
                 $order->fixed_term_delivery_status	=	$columns[85];
-                $order->pause_date	=	empty($columns[86])?null:$columns[86];
+                $order->pause_date	=	empty($columns[86])?null:Carbon::parse($columns[86])->format("Y-m-d");
                 $order->tax_rate_kubun	=	$columns[87];
                 $order->tax_rate	=	$columns[88];
                 $order->amazonpay_reference_id	=	$columns[89];
