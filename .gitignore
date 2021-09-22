@@ -11,3 +11,5 @@ backend/public/js/app.js
 
 .htaccess
 .user.ini
+.ftpaccess
+backend/storage/result_excel.xlsx
