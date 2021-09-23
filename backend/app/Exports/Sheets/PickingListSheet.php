@@ -30,10 +30,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
             '商品名',
             '到着希望日',
             '支払い方法',
-            'お客様からの通信欄',
-            '店舗内通信欄',
-            'お客様からの通信欄（定期）',
-            '店舗内通信欄（定期）',
+            '通信欄',
         ];
     }
     /**
@@ -60,10 +57,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
             $row->product_name,
             $row->delivery_specified_date . " " .$row->delivery_specified_time,
             $row->payment_methods,
-            $row->communication_field_from_guest,
-            $row->communication_field_in_store,
-            $row->guest_from_communicating_field_fixed_term,
-            $row->store_within_communicating_field_fixed_term,
+            $row->communication_field_from_guest . ($row->communication_field_from_guest?"\n":"") . $row->communication_field_in_store,
         ];
     }
     /**
