@@ -74,7 +74,7 @@ class InvoiceExport
         $file_name='result_excel.xlsx';
         $writer->save(storage_path($file_name));
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. $filename .'.xlsx');
+        header('Content-Disposition: attachment; filename="'. $filename );
         $writer->save("php://output");
         exit;
     }
