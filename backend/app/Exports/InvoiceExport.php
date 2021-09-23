@@ -20,9 +20,10 @@ class InvoiceExport
     public function download(string $filename)
     {
         $spreadsheet = PhpSpreadsheet\IOFactory::load(app_path($this->template_file));
-        $order_ids = DB::table('orders')->select('reception_number')->groupBy('reception_number')->get();
-        foreach ($order_ids as $order_id){
-            $orders = Orders::all()->where('reception_number', '=', $order_id->reception_number);
+        $key_groups = DB::table('orders')->select('reception_number')->groupBy('reception_number')->get();
+        $collection = Orders::all();
+        foreach ($key_groups as $key_obj){
+            $orders = $collection->where('reception_number', $key_obj->reception_number);
             $sheet = clone $spreadsheet->getSheetByName('テンプレート');
 
             //ヘッダー
