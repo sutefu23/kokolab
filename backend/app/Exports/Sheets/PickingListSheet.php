@@ -31,6 +31,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
             '到着希望日',
             '支払い方法',
             '通信欄',
+            '便種'
         ];
     }
     /**
@@ -58,6 +59,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
             $row->delivery_specified_date . " " .$row->delivery_specified_time,
             $row->payment_methods,
             $row->communication_field_from_guest . ($row->communication_field_from_guest?"\n":"") . $row->communication_field_in_store,
+            $row->feces_type
         ];
     }
     /**
