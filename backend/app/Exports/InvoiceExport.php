@@ -32,7 +32,11 @@ class InvoiceExport
             $sheet->getCell('A6')->setValue($orders->first()->orderer_prefectures . $orders->first()->orderer_city . $orders->first()->orderer_town_address . $orders->first()->orderer_building); // 【注文者】住所
             $sheet->getCell('A7')->setValue($orders->first()->orderer_full_name); //　氏名
             $sheet->getCell('E10')->setValue($orders->first()->reception_number); //　受注番号
-            $sheet->getCell('E11')->setValue(Carbon::parse($orders->first()->next_delivery_expected_date)->format('Y年m月d日')); // 次回発送
+            if($orders->first()->fixed_term_delivery_status === "停止（休止）"){
+                $sheet->getCell('E11')->setValue(""); // 次回発送null
+            }else{
+                $sheet->getCell('E11')->setValue(Carbon::parse($orders->first()->next_delivery_expected_date)->format('Y年m月d日')); // 次回発送
+            }
             $sheet->getCell('E12')->setValue($orders->first()->fixed_term_delivery_cycle); // お届け周期
             $sheet->getCell('N4')->setValue(Carbon::parse($orders->first()->delivery_due_date)->format('Y年m月d日')); // 発送日
             //明細
