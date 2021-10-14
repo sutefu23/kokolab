@@ -27,7 +27,7 @@ class InvoiceExport
             $sheet = clone $spreadsheet->getSheetByName('テンプレート');
 
             //ヘッダー
-            $sheet->setTitle($orders->first()->reception_number . $orders->first()->orderer_full_name . "様");//【注文者】氏名
+            $sheet->setTitle($orders->first()->orderer_full_name . "様");//【注文者】氏名
             $sheet->getCell('A5')->setValue("〒". substr($orders->first()->orderer_postal_code ,0,3) . "-". substr($orders->first()->orderer_postal_code ,3)); //【注文者】郵便番号
             $sheet->getCell('A6')->setValue($orders->first()->orderer_prefectures . $orders->first()->orderer_city . $orders->first()->orderer_town_address . $orders->first()->orderer_building); // 【注文者】住所
             $sheet->getCell('A7')->setValue($orders->first()->orderer_full_name); //　氏名
