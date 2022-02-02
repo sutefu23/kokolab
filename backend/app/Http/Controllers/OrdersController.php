@@ -67,11 +67,10 @@ class OrdersController extends Controller
             \App\Models\Orders::query()->delete();
 
             foreach ($csv_body as $row) {
-                $row = str_replace('"','',$row);
-                $columns = explode(',', $row);
+                $columns = explode('","', $row);//文章の中にカンマがあるため
                 $order = new \App\Models\Orders;
                 if(count($columns) <= 1 ) continue;//最後のカンマが空の1行とみなされることがあるため
-                $order->reception_date	=	empty($columns[0])?null:Carbon::parse($columns[0])->format("Y-m-d");
+                $order->reception_date	=	empty($columns[0])?null:Carbon::parse(ltrim($columns[0],'"'))->format("Y-m-d");
                 $order->reception_time	=	empty($columns[1])?null:Carbon::parse($columns[1])->format("G:i:s");
                 $order->reception_number	=	empty($columns[2])?null:$columns[2];
                 $order->branch_no_issue	=	empty($columns[3])?null:$columns[3];
@@ -160,7 +159,7 @@ class OrdersController extends Controller
                 $order->pause_date	=	empty($columns[86])?null:Carbon::parse($columns[86])->format("Y-m-d");
                 $order->tax_rate_kubun	=	$columns[87];
                 $order->tax_rate	=	$columns[88];
-                $order->amazonpay_reference_id	=	$columns[89];
+                $order->amazonpay_reference_id	=	rtrim($columns[89],'"');
                 $order->save();
             }
             DB::commit();
