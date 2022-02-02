@@ -89,7 +89,7 @@ const Orders: React.FC = () => {
     )
     return (
         <Fragment>
-            <h1 className="h3 mb-2 text-gray-800">取引データ</h1>
+            <h1 className="h3 mb-2 text-gray-800">取引データ </h1>
             <p className="mb-4">こちらからアップロードしてください</p>
             <Notification title="アップロードしました。" text="明細をアップロードしました。" isShow={displayAlert}></Notification>
             <div className="row mb-4">
@@ -107,12 +107,13 @@ const Orders: React.FC = () => {
                 アップロード
                 </button>
             </div>
+            {orders && <p>{orders[0]?.reception_date.toString()}受注分</p>}
 
             <div className="row">
                 {
                 orders &&
                     <React.Fragment>
-                        <TopCard title="受注日" text={orders[0]?.reception_date.toString()} icon="calendar-alt" class="success" />
+                        <TopCard title="発送予定" text={orders[0]?.delivery_due_date.toString()} icon="calendar-alt" class="success" />
                         <TopCard title="受注数" text={orderCount().toString()} icon="list-ol" class="danger" />
                         <TopCard title="合計額" text={orderSum().toLocaleString()} icon="calculator" class="success" />
                     </React.Fragment>

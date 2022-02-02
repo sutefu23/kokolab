@@ -61,7 +61,10 @@ function OrderList(props: OrderListProps): JSX.Element {
     const orderList: JSX.Element[] = props.orders.map((order) => {
         return (
             <tr className={`table-row`}
-                style={ { backgroundColor: colorMaster?.find((m) => m.item_code === order.item_code)?.color?.toString() }}
+                style={ { 
+                    backgroundColor: colorMaster?.find((m) => m.item_code === order.item_code)?.color?.toString(),
+                    border: order.feces_type.includes("ヤマト")?"solid 2px #FD503E": "none", //「ヤマト」だけ強調表示
+                }}
                 key={`${order.reception_number}_${order.item_code}`}
                 data-item-code={order.item_code}
                 onClick={handleClick}
@@ -70,6 +73,8 @@ function OrderList(props: OrderListProps): JSX.Element {
                 <td>{order.item_code }
                 </td>
                 <td>{order.product_name}</td>
+                <td>{order.feces_type}
+                </td>
                 <td>{order.quantity}</td>
                 <td>{order.inclusive_sum?.toLocaleString()}</td>
             </tr>);
@@ -84,6 +89,7 @@ function OrderList(props: OrderListProps): JSX.Element {
                         <th scope="col">商品コード</th>
                         <th scope="col">商品名</th>
                         <th scope="col">数量</th>
+                        <th scope="col">便種</th>
                         <th scope="col">合計金額</th>
                     </tr>
                 </thead>
