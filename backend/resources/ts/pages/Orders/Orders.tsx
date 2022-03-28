@@ -5,19 +5,25 @@ import  "./Orders.css";
 import TopCard from "../../common/components/TopCard";
 import FileUploader from "../../common/components/FileUploder";
 import Notification from "../../common/components/Notification";
-import useUpload from "../../hooks/order/useUploadCSV";
-import useGetOrdersQuery from "../../hooks/order/useGetOrders";
-import useGetGroupByItem from "../../hooks/order/useGetGroupByItem";
+import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs"
+import {useUploadCSV, useGetOrdersQuery, useGetGroupByItem, useDeleteOrder, useSettleShipping} from "../../hooks/order";
+import type { Order } from "../../models/order"
+
+
 const Tabs = {
     ITEM_LIST: 'ITEM_LIST',
     ITEM_GROUP: 'ITEM_GROUP',
 } as const
 
 const Orders: React.FC = () => {
-    const { status:orderStatus , data: orderData , error: orderErr } = useGetOrdersQuery();
-    const { status:groupStatus , data: groupData , error: groupErr } = useGetGroupByItem();
+    const [ queryDate, setQueryDate ] = useState<Order["delivery_due_date"]>(new Date());
 
-    const { mutate } = useUpload();
+    const { status:orderStatus , data: orderData , error: orderErr } = useGetOrdersQuery({fromDate: queryDate, toDate: queryDate});
+    const { status:groupStatus , data: groupData , error: groupErr } = useGetGroupByItem({fromDate: queryDate, toDate: queryDate});
+    const { mutate : deleteOrderApi } = useDeleteOrder();
+    const { mutate : settleShippingApi } = useSettleShipping();
+
+    const { mutate } = useUploadCSV();
     const [ displayAlert, setDisplayAlert ] = useState<boolean>(false)
 
     const [ orders, setOrders ] = useState<typeof orderData>(orderData)
@@ -25,6 +31,9 @@ const Orders: React.FC = () => {
 
     const [ file, setFile ] = useState<File|null>(null);
     const [ tab, setTab ] = useState<typeof Tabs[keyof typeof Tabs]>(Tabs.ITEM_LIST)
+
+    const [ selectedIds, setSelectedIds ] = useState<Order["id"][]>([])
+
 
     useEffect(() => {
         if (orderStatus === "success") {
@@ -37,6 +46,31 @@ const Orders: React.FC = () => {
             setGroups(groupData);
         }
     }, [groupStatus, groupData]);
+
+    const deleteOrders = useCallback((ids: Order["id"][]) => {
+        deleteOrderApi(ids, {
+            onError: (error) => {
+                alert(error.message);
+                },
+            onSuccess: (items) => {
+                setOrders(items)
+            },
+        })
+    }, [deleteOrderApi])
+
+    const settleShipping = useCallback(() => {
+        const ids = orders?.map((o) => o.id)
+        if(ids && ids?.length > 0 ){
+            settleShippingApi(ids, {
+                onError: (error) => {
+                    alert(error.message);
+                    },
+                onSuccess: (items) => {
+                    setOrders(items)
+                },
+            })    
+        }
+    }, [orders, settleShippingApi])
 
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +102,7 @@ const Orders: React.FC = () => {
         },
         [file, mutate]
     )
+    
     const orderSum = useCallback(
         () => {
             return orders?.reduce<number>((acc: number, val) => {
@@ -87,6 +122,8 @@ const Orders: React.FC = () => {
         },
         [orders]
     )
+
+
     return (
         <Fragment>
             <h1 className="h3 mb-2 text-gray-800">取引データ </h1>
@@ -107,19 +144,44 @@ const Orders: React.FC = () => {
                 アップロード
                 </button>
             </div>
-            {orders && <p>{orders[0]?.reception_date.toString()}受注分</p>}
 
             <div className="row">
                 {
                 orders &&
                     <React.Fragment>
-                        <TopCard title="発送予定" text={orders[0]?.delivery_due_date.toString()} icon="calendar-alt" class="success" />
+                        <TopCard title="発送予定" text="" icon="" class="success">
+                        <input type="date" name="date" defaultValue={String(orders?orders[0]?.delivery_due_date:"")}
+                            onChange={(e) => {e.currentTarget.value}}
+                        />
+                        </TopCard>
                         <TopCard title="受注数" text={orderCount().toString()} icon="list-ol" class="danger" />
                         <TopCard title="合計額" text={orderSum().toLocaleString()} icon="calculator" class="success" />
                     </React.Fragment>
                 }
             </div>
-
+            <div className="row">
+                <div
+                className="col-4 btn font-weight-bold nav-link text-green"
+                style={{"textAlign":"left"}}
+                onClick={() => {
+                    const prevDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate() - 1)
+                    setQueryDate(prevDate)
+                }}
+                >
+                    <BsFillCaretLeftFill/>前日
+                </div>
+                <div className="col-4">
+                </div>
+                <div className="col-4 btn font-weight-bold nav-link text-green" style={{"textAlign":"right"}}
+                    onClick={() => {
+                        const nextDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate() + 1)
+                        setQueryDate(nextDate)
+                    }}
+                >
+                    翌日
+                    <BsFillCaretRightFill/>
+                </div>
+            </div>
             <div className="row">
                 <div className="col-xl-12 col-lg-12">
                     <div className="card shadow mb-4">
@@ -133,7 +195,12 @@ const Orders: React.FC = () => {
                         </ul>
                         <div className="card-body">
                             {orders && tab == Tabs.ITEM_LIST &&
-                                <OrderList orders={orders}/>
+                                <OrderList 
+                                orders={orders}
+                                onDelete={(id) => deleteOrders([id])}
+                                checkedIds={selectedIds}
+                                setCheckIds={setSelectedIds}
+                                />
                             }
                             {groups && tab == Tabs.ITEM_GROUP &&
                                 <OrderGroup groups={groups}/>
@@ -142,10 +209,37 @@ const Orders: React.FC = () => {
                     </div>
                 </div>
             </div>
+           {orderErr && 
+                <Notification title="エラー" text="商品情報の取得に失敗しました。" isShow={true}/>
+           }
+           {groupErr && 
+                <Notification title="エラー" text="商品グループデータの取得に失敗しました。" isShow={true} />
+           }
 
             {orders &&
             <React.Fragment>
-                <a href="/api/orders/download/pickingList" className="btn btn-success mb-4" target="_blank">ピッキングリスト</a>
+                <div className="btn btn-danger mb-4"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        if(selectedIds.length == 0){
+                            alert("明細が選択されていません")
+                            return
+                        }
+                        const deleteIds = orders.filter((o) => selectedIds.indexOf(o.id) > 1 && !o.is_shipping_fixed).map((o) => o.id)
+                        if(confirm(`${deleteIds.length}件を削除します\n（確定明細は削除されません）`)){
+                            deleteOrders(deleteIds)
+                        }
+                    }}
+                >出荷削除</div>
+                <div className="btn btn-info mb-4 ml-4"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        if(confirm(`表示されている${orderCount().toString()}件の出荷を確定します`)){
+                            settleShipping()
+                        }
+                    }}
+                >出荷確定</div>
+                <a href="/api/orders/download/pickingList" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
                 <a href="/api/orders/download/invoice" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
             </React.Fragment>
             }

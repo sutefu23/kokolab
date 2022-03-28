@@ -1,19 +1,24 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { SketchPicker, Color, ColorResult } from 'react-color';
-import { Order, OrderColorMaster } from "../../models/order"
+import type { Order } from "../../models/order"
 import { useGetColorMaster, useSetColorMaster } from "../../hooks/order"
+import { BsFillCheckCircleFill } from "react-icons/bs";
 
 type OrderListProps = {
     orders: Order[]
+    onDelete: (id: Order["id"]) => void
+    checkedIds: Order["id"][]
+    setCheckIds: (ids: Order["id"][]) => void
 }
-function OrderList(props: OrderListProps): JSX.Element {
+function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps): JSX.Element {
     const { status:getColorQueryStatus , data: colorMasterQueryData } = useGetColorMaster();
-    const { mutate } = useSetColorMaster();
+    const { mutate : setColorApi } = useSetColorMaster();
 
     const [ currentBgColor, setCurrentBgColor ] = useState<Color>('#fff')
     const [ currentItemCode, setCurrentItemCode ] = useState<string|null>(null)
     const [ visiblePicker, setVisiblePicker ] = useState<boolean>(false)
     const [ colorMaster, setColorMaster ] = useState<typeof colorMasterQueryData>(colorMasterQueryData)
+
 
     const handleClick = useCallback(
         (event: React.MouseEvent) => {
@@ -39,7 +44,7 @@ function OrderList(props: OrderListProps): JSX.Element {
                 const newElm = {item_code: currentItemCode ,color: color.hex }
                 const newMaster = [...colorMaster.filter((m) => m.item_code !== currentItemCode), newElm ]
                 
-                mutate(newMaster,{
+                setColorApi(newMaster,{
                     onError: (error) => {
                         alert(error.message);
                       },
@@ -49,16 +54,18 @@ function OrderList(props: OrderListProps): JSX.Element {
                 })    
             }
         }
+        
+
     const popover = {
         position: 'absolute' as const,
         zIndex: 2,
         top:0,
         left:'-10px'
       }
-    const cover = {
-    }
 
-    const orderList: JSX.Element[] = props.orders.map((order) => {
+      const OrderRow = ({order}: { order: Order})  => {
+        const [ visibleDeleteButton, setVisibleDeleteButton ] = useState<boolean>(false)
+
         return (
             <tr className={`table-row`}
                 style={ { 
@@ -68,23 +75,63 @@ function OrderList(props: OrderListProps): JSX.Element {
                 key={`${order.reception_number}_${order.item_code}`}
                 data-item-code={order.item_code}
                 onClick={handleClick}
+                onMouseEnter={() => setVisibleDeleteButton(true)}
+                onMouseLeave={() => setVisibleDeleteButton(false)}
                 >
-                <th scope="row">{order.reception_number}</th>
+                <td>
+                    <input type="checkbox" onChange={(e) => {
+                        if(e.target.checked){
+                            setCheckIds([...checkedIds, order.id])
+                        }else{
+                            setCheckIds([...checkedIds.filter((id) => id !== order.id)])
+                        }
+                    }}
+                    checked={checkedIds.indexOf(order.id) > -1}
+                    />                    
+                </td>
+                <th scope="row">
+                    {order.reception_number} 
+                </th>
                 <td>{order.item_code }
                 </td>
                 <td>{order.product_name}</td>
                 <td>{order.feces_type}
                 </td>
                 <td>{order.quantity}</td>
-                <td>{order.inclusive_sum?.toLocaleString()}</td>
-            </tr>);
-    })
+                <td>{order.inclusive_sum?.toLocaleString()}
+                {order.is_shipping_fixed && <BsFillCheckCircleFill color="green"/>}
+                {!order.is_shipping_fixed && visibleDeleteButton && 
+                    <i
+                    className=""
+                    style={{color:"red", fontSize:"0.85em", display:"inline-block", fontWeight:"normal"}}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        if (confirm(`${order.reception_number}${order.product_name}\n削除してよろしいでしょうか。`)) {
+                            onDelete(order.id)
+                        }
+                    }}
+                    >削除</i>}  
+                </td>
+            </tr>)
+        }
+    
 
     return (
         <div className="table-responsive portlet">
+            <i className="fa-solid fa-trash-can"></i>
             <table className="table">
                 <thead className="thead-light">
                     <tr>
+                        <th scope="col">
+                        <input type="checkbox" onChange={(e) => {
+                            if(e.target.checked){
+                                setCheckIds(orders.map((o) => o.id))
+                            }else{
+                                setCheckIds([])
+                            }
+                        }}/>  
+                        </th>
                         <th scope="col">受付番号</th>
                         <th scope="col">商品コード</th>
                         <th scope="col">商品名</th>
@@ -94,12 +141,12 @@ function OrderList(props: OrderListProps): JSX.Element {
                     </tr>
                 </thead>
                 <tbody>
-                    {orderList}
+                    {orders.map((o) => <OrderRow key={o.id} order={o}/>)}
                 </tbody>
             </table>
             {visiblePicker && 
                 <div style={ popover }>
-                    <div style={ cover }>
+                    <div>
                         <SketchPicker
                             color={ currentBgColor }
                             onChangeComplete={ handleChangeComplete }
@@ -109,6 +156,8 @@ function OrderList(props: OrderListProps): JSX.Element {
             }
         </div>
     )
+
 }
+
 
 export default OrderList;

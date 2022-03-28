@@ -172,5 +172,29 @@ class OrdersController extends Controller
             $request->flash();
         }
 
+        function getOrders(Request $request){
+            $requests = $request->getContent();
+            Log::debug($requests);
+            DB::table('orders')::where(['shipping_date' => $request->date]);
+        }
+
+        function deleteOrders(Request $request){
+            $requests = $request->getContent();
+            $delete_ids = $request->ids;
+            Log::debug($requests);
+
+            if(len($delete_ids) === 0) return null;
+
+            try {
+                Orders::whereIn(['id' => $delete_ids])->delete();
+            } catch (\Exception $e){
+                \Log::error($e);
+                abort(400, '削除に失敗しました。');
+                DB::rollBack();
+            } finally {
+                $request->flash();
+            }
+        }
+
     }
 }

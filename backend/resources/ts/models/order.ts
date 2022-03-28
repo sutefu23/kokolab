@@ -1,6 +1,7 @@
 import { Color } from 'react-color';
 
 export type Order = {
+  id: number //テーブルID
   reception_date : Date //受付日
   reception_time : Date //受付時間
   reception_number : string //受付番号
@@ -91,6 +92,7 @@ export type Order = {
   tax_rate_kubun : string //税率区分
   tax_rate : string //税率
   amazonpay_reference_id : string //amazonpayリファレンスid
+  is_shipping_fixed : boolean //確定データか否か
 }
 
 export type OrderColorMaster = {

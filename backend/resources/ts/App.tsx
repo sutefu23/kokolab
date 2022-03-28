@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import "./styles/sb-admin-2.min.css";
+import "./styles/sb-admin-2.css";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Login from "./pages/Account/Login";
 import Admin from "./pages/Admin/Admin";

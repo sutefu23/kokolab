@@ -1,9 +1,8 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
         "development": "mix",
-        "watch": "mix watch",
+        "dev": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
@@ -72,6 +71,7 @@
         "react-apollo": "^3.1.5",
         "react-color": "^2.19.3",
         "react-fontawesome": "^1.7.1",
+        "react-icons": "^4.3.1",
         "react-query": "^3.13.6",
         "react-redux": "^7.2.3",
         "react-router-dom": "^5.2.0",
