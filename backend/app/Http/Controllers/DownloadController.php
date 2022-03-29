@@ -14,10 +14,10 @@ class DownloadController extends Controller
     }
 
     public function pickingList(Request $request){
-        return (new PickingListExport())->download('pickinglist'. date('YmdHis') .'.xlsx');
+        return (new PickingListExport($request['targetDate']))->download('pickinglist'. date('YmdHis') .'.xlsx');
     }
 
     public  function invoice(Request  $request){
-        return (new InvoiceExport())->download('invoice'. date('YmdHis') .'.xlsx');
+        return (new InvoiceExport($request['targetDate']))->download('invoice'. date('YmdHis') .'.xlsx');
     }
 }

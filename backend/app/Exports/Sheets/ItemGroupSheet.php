@@ -2,7 +2,7 @@
 namespace App\Exports\Sheets;
 
 use App\Exports\Traits\KokolabStylize;
-use Illuminate\Database\Eloquent\Collection;
+use App\Services\Orders;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,6 +14,12 @@ class ItemGroupSheet implements FromCollection, WithHeadings, WithTitle, WithEve
 {
     use KokolabStylize;
 
+    static $targetDate;
+    public function __construct($targetDate)
+    {
+        self::$targetDate = $targetDate;
+    }
+
     public function headings(): array
     {
         return [
@@ -23,11 +29,14 @@ class ItemGroupSheet implements FromCollection, WithHeadings, WithTitle, WithEve
         ];
     }
     /**
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
-    public function collection(): Collection
+    public function collection()
     {
-        return \App\Models\Orders::groupByItem();
+        try {
+            return Orders::groupByItem(self::$targetDate, self::$targetDate);
+        } catch (\Exception $e) {
+        }
     }
     /**
      * @return array

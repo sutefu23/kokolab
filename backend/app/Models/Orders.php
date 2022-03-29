@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 /**
  * @property integer $id
  * @property string $reception_date
@@ -154,19 +152,5 @@ class Orders extends Model
                 order_id -- 注文ID
             ");
         });
-    }
-
-    public static function shippingFix(array $ids){
-        DB::table('orders')->whereIn('id', $ids)->update(['is_shipping_fixed' => true]);
-    }
-
-    public static function getOrderDate(){
-        $order = self::all()->take(1)->get();
-        return $order->reception_date;
-    }
-
-    public static function groupByItem():Collection{
-        $group = DB::select(DB::raw("select item_code, product_name, sum(quantity) as quantity from orders group by item_code, product_name order by CONVERT(item_code, UNSIGNED INTEGER ) "));
-        return Orders::hydrate($group);
     }
 }

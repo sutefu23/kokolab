@@ -48,7 +48,7 @@ const Orders: React.FC = () => {
     }, [groupStatus, groupData]);
 
     const deleteOrders = useCallback((ids: Order["id"][]) => {
-        deleteOrderApi(ids, {
+        deleteOrderApi({ids, target_date: queryDate}, {
             onError: (error) => {
                 alert(error.message);
                 },
@@ -56,12 +56,12 @@ const Orders: React.FC = () => {
                 setOrders(items)
             },
         })
-    }, [deleteOrderApi])
+    }, [deleteOrderApi, queryDate])
 
     const settleShipping = useCallback(() => {
         const ids = orders?.map((o) => o.id)
         if(ids && ids?.length > 0 ){
-            settleShippingApi(ids, {
+            settleShippingApi({ids, target_date: queryDate}, {
                 onError: (error) => {
                     alert(error.message);
                     },
@@ -70,7 +70,7 @@ const Orders: React.FC = () => {
                 },
             })    
         }
-    }, [orders, settleShippingApi])
+    }, [orders, settleShippingApi, queryDate])
 
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +88,10 @@ const Orders: React.FC = () => {
                 return
             }
             mutate(
-                file,{
+                {
+                    csv: file,
+                    target_date: queryDate
+                },{
                     onError: (error) => {
                         alert(error.message);
                       },
@@ -100,7 +103,7 @@ const Orders: React.FC = () => {
                 }
               );
         },
-        [file, mutate]
+        [file, queryDate, mutate]
     )
     
     const orderSum = useCallback(
@@ -150,7 +153,7 @@ const Orders: React.FC = () => {
                 orders &&
                     <React.Fragment>
                         <TopCard title="発送予定" text="" icon="" class="success">
-                        <input type="date" name="date" defaultValue={String(orders?orders[0]?.delivery_due_date:"")}
+                        <input type="date" name="date" defaultValue={String(new Date())}
                             onChange={(e) => {e.currentTarget.value}}
                         />
                         </TopCard>
@@ -239,8 +242,8 @@ const Orders: React.FC = () => {
                         }
                     }}
                 >出荷確定</div>
-                <a href="/api/orders/download/pickingList" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
-                <a href="/api/orders/download/invoice" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
+                <a href={`/api/orders/download/pickingList/?targetDate=${queryDate.toISOString()}`} rel="noreferrer" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
+                <a href={`/api/orders/download/invoice?targetDate=${queryDate.toISOString()}`} rel="noreferrer" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
             </React.Fragment>
             }
         </Fragment>

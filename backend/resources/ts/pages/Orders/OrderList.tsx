@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { SketchPicker, Color, ColorResult } from 'react-color';
+import useMouse from '@react-hook/mouse-position'
 import type { Order } from "../../models/order"
 import { useGetColorMaster, useSetColorMaster } from "../../hooks/order"
 import { BsFillCheckCircleFill } from "react-icons/bs";
@@ -13,22 +14,33 @@ type OrderListProps = {
 function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps): JSX.Element {
     const { status:getColorQueryStatus , data: colorMasterQueryData } = useGetColorMaster();
     const { mutate : setColorApi } = useSetColorMaster();
+    const ref = useRef(null)
+    const mouse = useMouse(ref, {
+        enterDelay: 100,
+        leaveDelay: 100,
+      })
 
+    const [ pickerXY, setPickerXY ] = useState<{ x:number , y:number }>({ x:0, y:0 })
     const [ currentBgColor, setCurrentBgColor ] = useState<Color>('#fff')
     const [ currentItemCode, setCurrentItemCode ] = useState<string|null>(null)
     const [ visiblePicker, setVisiblePicker ] = useState<boolean>(false)
     const [ colorMaster, setColorMaster ] = useState<typeof colorMasterQueryData>(colorMasterQueryData)
 
 
-    const handleClick = useCallback(
+    const handlePicker = useCallback(
         (event: React.MouseEvent) => {
             event.preventDefault()
+            setPickerXY({
+                x: mouse.x ?? 0,
+                y: mouse.y ?? 0
+            })
             setVisiblePicker(!visiblePicker)
             if( event.currentTarget.getAttribute('data-item-code')){
                 setCurrentItemCode( event.currentTarget.getAttribute('data-item-code'))
             }
+            return false
         },
-        [visiblePicker],
+        [mouse.x, mouse.y, visiblePicker],
     )
 
     useEffect(() => {
@@ -59,8 +71,8 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
     const popover = {
         position: 'absolute' as const,
         zIndex: 2,
-        top:0,
-        left:'-10px'
+        top: pickerXY.x,
+        left: 0
       }
 
       const OrderRow = ({order}: { order: Order})  => {
@@ -70,11 +82,12 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
             <tr className={`table-row`}
                 style={ { 
                     backgroundColor: colorMaster?.find((m) => m.item_code === order.item_code)?.color?.toString(),
+                    position:"relative",
                     border: order.feces_type.includes("ヤマト")?"solid 2px #FD503E": "none", //「ヤマト」だけ強調表示
                 }}
                 key={`${order.reception_number}_${order.item_code}`}
                 data-item-code={order.item_code}
-                onClick={handleClick}
+                onContextMenu={handlePicker}
                 onMouseEnter={() => setVisibleDeleteButton(true)}
                 onMouseLeave={() => setVisibleDeleteButton(false)}
                 >

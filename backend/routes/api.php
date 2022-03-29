@@ -22,17 +22,19 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('/users/me', 'UserController@show')->name('me');
 
-Route::get('/orders', 'OrdersController@index')->name('orders');
+Route::get('/orders', 'OrdersController@getOrders')->name('orders'); // param fromDate, toDate
 
-Route::post('/orders/upload', 'OrdersController@upload')->name('ordersUpload');
+Route::get('/orders/group_by_item', 'OrdersController@groupByItem')->name('ordersGroupByItem');// param fromDate, toDate
+
+Route::delete('/orders/delete', 'OrdersController@deleteOrders')->name('deleteOrders'); //param ids
+
+Route::post('/orders/upload', 'OrdersController@upload')->name('ordersUpload');// param targetDate
 
 Route::get('/orders/color', 'OrdersController@getColor')->name('orderGetColor');
 
 Route::post('/orders/color', 'OrdersController@setColor')->name('orderSetColor');
 
-Route::get('/orders/group_by_item', 'OrdersController@groupByItem')->name('ordersGroupByItem');
+Route::get('/orders/download/pickingList', 'DownloadController@pickingList')->name('downloadPickingList'); // param targetDate
 
-Route::get('/orders/download/pickingList', 'DownloadController@pickingList')->name('downloadPickingList');
-
-Route::get('/orders/download/invoice', 'DownloadController@invoice')->name('downloadInvoice');
+Route::get('/orders/download/invoice', 'DownloadController@invoice')->name('downloadInvoice'); // param targetDate
 

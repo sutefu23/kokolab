@@ -2,9 +2,7 @@
 namespace App\Exports\Sheets;
 
 use App\Exports\Traits\KokolabStylize;
-use App\Models\Orders;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -17,6 +15,13 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
 {
 
     use KokolabStylize;
+
+    static $targetDate;
+
+    public function __construct($targetDate)
+    {
+        self::$targetDate = $targetDate;
+    }
 
     public function headings(): array
     {
@@ -39,7 +44,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
      */
     public function collection(): Collection
     {
-        $orders = Orders::all();
+        $orders = \App\Services\Orders::getOrders(self::$targetDate);
         $collections = [];
         foreach ($orders as $order){
             for ($q = 1; $q <= $order->quantity; $q++) { //個数が1個以上の場合は顧客名などを空欄にしたうえでその分列を追加する
@@ -67,7 +72,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
     /**
      *
      * @return array
-     * @var Orders $row
+     * @var \App\Model\Orders $row
      */
     public function map($row): array
     {

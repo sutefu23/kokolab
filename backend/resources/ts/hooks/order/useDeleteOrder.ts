@@ -2,15 +2,19 @@ import { useQueryClient, useMutation, UseMutationResult } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { Order } from '../../models/order';
 
-const del = async (ids: Order["id"][]): Promise<Order[]> => {
-  const { data } = await axios.post<Order[]>('/api/orders/delete', ids)
+type QueryParam = {
+  ids: Order["id"][],
+  target_date: Date
+}
+const del = async (params:QueryParam): Promise<Order[]> => {
+  const { data } = await axios.delete<Order[]>('/api/orders/delete', { data: params })
   return data  
 }
 
 const useDelete = (): UseMutationResult<
   Order[],
   AxiosError,
-  Order["id"][],
+  QueryParam,
   undefined
 > => {
   const queryClient = useQueryClient();
