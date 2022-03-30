@@ -3,6 +3,7 @@ import LeftMenu from "../LeftMenu/LeftMenu";
 import TopMenu from "../TopMenu/TopMenu";
 import { Switch, Route } from "react-router";
 import Orders from "../Orders/Orders";
+import Reports from "../Reports/Reports";
 
 const Admin: React.FC = () => {
 
@@ -14,7 +15,8 @@ const Admin: React.FC = () => {
           <TopMenu />
           <div className="container-fluid">
             <Switch>
-              <Route path={`/`}><Orders /></Route>
+              <Route exact path={`/`}><Orders /></Route>
+              <Route exact path={`/Report`}><Reports /></Route>
             </Switch>
           </div>
         </div>

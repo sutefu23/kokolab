@@ -30,6 +30,8 @@ Route::delete('/orders/delete', 'OrdersController@deleteOrders')->name('deleteOr
 
 Route::post('/orders/upload', 'OrdersController@upload')->name('ordersUpload');// param targetDate
 
+Route::post('/orders/settle', 'OrdersController@settleShipping')->name('ordersSettle');// param ids, targetDate
+
 Route::get('/orders/color', 'OrdersController@getColor')->name('orderGetColor');
 
 Route::post('/orders/color', 'OrdersController@setColor')->name('orderSetColor');

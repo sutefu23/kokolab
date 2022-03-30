@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { BsFillBarChartLineFill } from "react-icons/bs"
 import { FaTachometerAlt } from "react-icons/fa"
-
+import { Transition } from '@headlessui/react'
 const LeftMenu: React.FC = () => {
 
     const [leftMenuVisibility, setLeftMenuVisibility] = useState(false);
@@ -18,29 +18,36 @@ const LeftMenu: React.FC = () => {
     return (
         <Fragment>
             <ul className={`navbar-nav bg-gradient-primary-green sidebar sidebar-dark accordion ${getCollapseClass()}`}
-                id="collapseMenu">
+                id="collapseMenu"
+                >
 
-                <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a className="sidebar-brand d-flex align-items-center justify-content-center" href="/">
                     <div className="sidebar-brand-icon icon-green rotate-n-15">
                         <i className="fas fa-bolt"></i>
                     </div>
-                    <div className="sidebar-brand-text mx-3">ココラボ <sup>Admin</sup></div>
+                    {
+                        leftMenuVisibility &&
+                        <div className="sidebar-brand-text mx-3">ココラボ <sup>Admin</sup></div>
+                    }
                 </a>
-                <button className="btn btn-primary toggle-button" onClick={() => changeLeftMenuVisibility()}>
-                    <i className="fas fa-bolt"></i>
-                </button>
                 <hr className="sidebar-divider my-0" />
 
                 <li className="nav-item active">
-                    <Link className="nav-link" to="Orders">
+                    <Link className="nav-link" to="/" title="出荷管理">
                         <FaTachometerAlt />
-                        <span className="ml-1 mt-1">受注管理</span>
+                        {
+                        leftMenuVisibility &&
+                        <span className="ml-1 mt-1">出荷管理</span>
+                        }
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="Reports">
+                    <Link className="nav-link" to="Reports" title="月次集計">
                         <BsFillBarChartLineFill />
+                        {
+                        leftMenuVisibility &&
                         <span className="ml-1 mt-1">月次集計</span>
+                        }
                     </Link>
                 </li>
 

@@ -92,6 +92,7 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 onMouseLeave={() => setVisibleDeleteButton(false)}
                 >
                 <td>
+                {order.is_shipping_fixed ? <BsFillCheckCircleFill color="green"/>:
                     <input type="checkbox" onChange={(e) => {
                         if(e.target.checked){
                             setCheckIds([...checkedIds, order.id])
@@ -100,7 +101,8 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                         }
                     }}
                     checked={checkedIds.indexOf(order.id) > -1}
-                    />                    
+                    />                
+                }
                 </td>
                 <th scope="row">
                     {order.reception_number} 
@@ -112,7 +114,6 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 </td>
                 <td>{order.quantity}</td>
                 <td>{order.inclusive_sum?.toLocaleString()}
-                {order.is_shipping_fixed && <BsFillCheckCircleFill color="green"/>}
                 {!order.is_shipping_fixed && visibleDeleteButton && 
                     <i
                     className=""

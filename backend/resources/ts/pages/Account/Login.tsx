@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const location = useLocation();
   
   const { from } = (location.state as { from: string }) || {
-    from: { pathname: '/Orders'}
+    from: { pathname: '/'}
   }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

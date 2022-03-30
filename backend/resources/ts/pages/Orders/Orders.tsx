@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useCallback, useEffect } from "react";
+import dayjs from 'dayjs'
 import OrderList from "./OrderList";
 import OrderGroup from "./OrderGroup";
 import  "./Orders.css";
@@ -8,7 +9,6 @@ import Notification from "../../common/components/Notification";
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs"
 import {useUploadCSV, useGetOrdersQuery, useGetGroupByItem, useDeleteOrder, useSettleShipping} from "../../hooks/order";
 import type { Order } from "../../models/order"
-
 
 const Tabs = {
     ITEM_LIST: 'ITEM_LIST',
@@ -23,7 +23,7 @@ const Orders: React.FC = () => {
     const { mutate : deleteOrderApi } = useDeleteOrder();
     const { mutate : settleShippingApi } = useSettleShipping();
 
-    const { mutate } = useUploadCSV();
+    const { mutate : uploadCSVApi} = useUploadCSV();
     const [ displayAlert, setDisplayAlert ] = useState<boolean>(false)
 
     const [ orders, setOrders ] = useState<typeof orderData>(orderData)
@@ -87,23 +87,21 @@ const Orders: React.FC = () => {
                 alert("ファイルを選択してください。")
                 return
             }
-            mutate(
-                {
-                    csv: file,
-                    target_date: queryDate
-                },{
+            uploadCSVApi(
+                    file,{
                     onError: (error) => {
                         alert(error.message);
                       },
                     onSuccess: (orders) => {
                         setOrders(orders)
                         setFile(null)
+                        setQueryDate(new Date(orders[0].delivery_due_date))
                         setDisplayAlert(true)
                     },
                 }
               );
         },
-        [file, queryDate, mutate]
+        [file, uploadCSVApi]
     )
     
     const orderSum = useCallback(
@@ -129,9 +127,9 @@ const Orders: React.FC = () => {
 
     return (
         <Fragment>
-            <h1 className="h3 mb-2 text-gray-800">取引データ </h1>
+            <h1 className="h3 mb-2 text-gray-800">出荷管理 </h1>
             <p className="mb-4">こちらからアップロードしてください</p>
-            <Notification title="アップロードしました。" text="明細をアップロードしました。" isShow={displayAlert}></Notification>
+            <Notification title="アップロードしました。" text={`明細をアップロードしました。\n${dayjs(queryDate).format('MM月DD日')}出荷分`} isShow={displayAlert}></Notification>
             <div className="row mb-4">
                 <FileUploader
                     id="csv_upload"
@@ -153,8 +151,11 @@ const Orders: React.FC = () => {
                 orders &&
                     <React.Fragment>
                         <TopCard title="発送予定" text="" icon="" class="success">
-                        <input type="date" name="date" defaultValue={String(new Date())}
-                            onChange={(e) => {e.currentTarget.value}}
+                        <input type="date" name="date"
+                            value={dayjs(queryDate).format('YYYY-MM-DD')}
+                            onChange={(e) => {
+                                setQueryDate(new Date(e.currentTarget.value))
+                            }}
                         />
                         </TopCard>
                         <TopCard title="受注数" text={orderCount().toString()} icon="list-ol" class="danger" />
@@ -167,8 +168,8 @@ const Orders: React.FC = () => {
                 className="col-4 btn font-weight-bold nav-link text-green"
                 style={{"textAlign":"left"}}
                 onClick={() => {
-                    const prevDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate() - 1)
-                    setQueryDate(prevDate)
+                    const prevDate = dayjs(queryDate).add(-1, 'd').format('YYYY-MM-DD')
+                    setQueryDate(new Date(prevDate))
                 }}
                 >
                     <BsFillCaretLeftFill/>前日
@@ -177,8 +178,8 @@ const Orders: React.FC = () => {
                 </div>
                 <div className="col-4 btn font-weight-bold nav-link text-green" style={{"textAlign":"right"}}
                     onClick={() => {
-                        const nextDate = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate() + 1)
-                        setQueryDate(nextDate)
+                        const nextDate = dayjs(queryDate).add(1, 'd').format('YYYY-MM-DD')
+                        setQueryDate(new Date(nextDate))
                     }}
                 >
                     翌日
@@ -228,7 +229,8 @@ const Orders: React.FC = () => {
                             alert("明細が選択されていません")
                             return
                         }
-                        const deleteIds = orders.filter((o) => selectedIds.indexOf(o.id) > 1 && !o.is_shipping_fixed).map((o) => o.id)
+                        const deleteIds = orders.filter((o) => selectedIds.indexOf(o.id) > -1 && !o.is_shipping_fixed).map((o) => o.id)
+
                         if(confirm(`${deleteIds.length}件を削除します\n（確定明細は削除されません）`)){
                             deleteOrders(deleteIds)
                         }
@@ -242,8 +244,8 @@ const Orders: React.FC = () => {
                         }
                     }}
                 >出荷確定</div>
-                <a href={`/api/orders/download/pickingList/?targetDate=${queryDate.toISOString()}`} rel="noreferrer" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
-                <a href={`/api/orders/download/invoice?targetDate=${queryDate.toISOString()}`} rel="noreferrer" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
+                <a href={`/api/orders/download/pickingList/?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
+                <a href={`/api/orders/download/invoice?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
             </React.Fragment>
             }
         </Fragment>

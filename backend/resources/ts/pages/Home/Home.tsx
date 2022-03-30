@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import TopCard from "../../common/components/TopCard";
-import OrderList from "../Orders/OrderList";
+// import TopCard from "../../common/components/TopCard";
+// import OrderList from "../Orders/OrderList";
 
 const Home: React.FC = () => {
 

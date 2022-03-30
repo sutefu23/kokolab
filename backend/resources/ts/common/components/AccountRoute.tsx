@@ -14,7 +14,7 @@ export function AccountRoute({ children, ...rest }: RouteProps): JSX.Element {
                 isLogin ? (
                     <Redirect
                         to={{
-                            pathname: "/admin/home"
+                            pathname: "/Order"
                         }}
                     />
                 ) : <Login />
