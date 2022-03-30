@@ -10075,8 +10075,16 @@ a:focus {
 }
 
 .sidebar {
-  width: 3.5rem;
+  width: 14rem;
   min-height: 100vh;
+}
+
+.sidebar.collapsed{
+  width: 3.5rem;
+}
+
+.sidebar.collapsed .nav-item .nav-link span{
+  display: none;
 }
 
 .sidebar .nav-item {

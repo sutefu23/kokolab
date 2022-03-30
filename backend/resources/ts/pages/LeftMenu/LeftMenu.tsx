@@ -18,6 +18,8 @@ const LeftMenu: React.FC = () => {
     return (
         <Fragment>
             <ul className={`navbar-nav bg-gradient-primary-green sidebar sidebar-dark accordion ${getCollapseClass()}`}
+                onMouseEnter={() => setLeftMenuVisibility(true)}
+                onMouseLeave={() => setLeftMenuVisibility(false)}
                 id="collapseMenu"
                 >
 
@@ -35,19 +37,13 @@ const LeftMenu: React.FC = () => {
                 <li className="nav-item active">
                     <Link className="nav-link" to="/" title="出荷管理">
                         <FaTachometerAlt />
-                        {
-                        leftMenuVisibility &&
-                        <span className="ml-1 mt-1">出荷管理</span>
-                        }
+                        <span className="ml-1 mt-1 menu-text">出荷管理</span>
                     </Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="Reports" title="月次集計">
                         <BsFillBarChartLineFill />
-                        {
-                        leftMenuVisibility &&
-                        <span className="ml-1 mt-1">月次集計</span>
-                        }
+                        <span className="ml-1 mt-1 menu-text">月次集計</span>
                     </Link>
                 </li>
 
