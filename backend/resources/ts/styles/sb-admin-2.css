@@ -10077,6 +10077,7 @@ a:focus {
 .sidebar {
   width: 14rem;
   min-height: 100vh;
+  transition: width .4s;
 }
 
 .sidebar.collapsed{
