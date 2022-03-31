@@ -28,7 +28,7 @@ function OrderGroup(props: OrderGroupProps): JSX.Element {
     })
 
     return (
-        <div className="table-responsive portlet">
+        <div className="table-responsive portlet order-list">
             <table className="table">
                 <thead className="thead-light">
                     <tr>

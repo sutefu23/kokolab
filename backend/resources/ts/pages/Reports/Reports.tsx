@@ -70,7 +70,7 @@ const Reports :React.FC = () => {
          <div className="header-buttons"></div>
       </div>
       <div className="card-body">
-         <div className="table-responsive portlet">
+         <div className="table-responsive portlet report-list">
             <table className="table">
                <thead className="thead-light">
                 <tr>

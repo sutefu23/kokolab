@@ -14,8 +14,10 @@ th{
   white-space: nowrap;
 }
 td{
-  text-align: right;
   border-right: solid 1px #dee2e6;
+}
+.report-list td{
+  text-align: right;
 }
 tr:nth-child(2n){
   background-color: #eee;

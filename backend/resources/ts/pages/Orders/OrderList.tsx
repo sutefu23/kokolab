@@ -117,7 +117,7 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 <td>{order.inclusive_sum?.toLocaleString()}
                 {!order.is_shipping_fixed && visibleDeleteButton && 
                     <i
-                    className=""
+                    className="fa-solid fa-trash-can"
                     style={{color:"red", fontSize:"0.85em", display:"inline-block", fontWeight:"normal"}}
                     onClick={(e) => {
                         e.preventDefault()
@@ -126,15 +126,14 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                             onDelete(order.id)
                         }
                     }}
-                    >削除</i>}  
+                    ></i>}  
                 </td>
             </tr>)
         }
     
 
     return (
-        <div className="table-responsive portlet">
-            <i className="fa-solid fa-trash-can"></i>
+        <div className="table-responsive portlet order-list">
             <table className="table">
                 <thead className="thead-light">
                     <tr>
