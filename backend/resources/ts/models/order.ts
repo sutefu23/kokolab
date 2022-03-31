@@ -100,8 +100,18 @@ export type OrderColorMaster = {
   color: Color
 }
 
-export type OrderGroupByItem = {
+export type OrderGroupByItem = {//商品コードごとに集計したデータ
   item_code : string
   product_name: string
-  quantity: number
+  quantity: number,
+  subtotal: number
+}
+
+export type OrderMonthlyReport = {
+  [item_code:string]: {
+    [delivery_due_date: string]: {
+      quantity: number,
+      subtotal: number
+    }
+  }
 }

@@ -90,6 +90,7 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 onContextMenu={handlePicker}
                 onMouseEnter={() => setVisibleDeleteButton(true)}
                 onMouseLeave={() => setVisibleDeleteButton(false)}
+                onClick={() => setVisiblePicker(false)}
                 >
                 <td>
                 {order.is_shipping_fixed ? <BsFillCheckCircleFill color="green"/>:

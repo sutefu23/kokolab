@@ -1,0 +1,29 @@
+.table{
+  border: solid 1px #dee2e6;
+}
+.table th{
+  border-right: solid 1px #dee2e6;
+}
+thead{
+  border-top:solid 1px #dee2e6 ;
+}
+tbody{
+  cursor: pointer;
+}
+th{
+  white-space: nowrap;
+}
+td{
+  text-align: right;
+  border-right: solid 1px #dee2e6;
+}
+tr:nth-child(2n){
+  background-color: #eee;
+}
+
+.hovered {
+  background-color: rgb(230, 250, 242)!important;
+}
+.clicked {
+  background-color: lavender!important;
+}

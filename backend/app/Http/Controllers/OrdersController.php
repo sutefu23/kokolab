@@ -43,6 +43,26 @@ class OrdersController extends Controller
         }
     }
 
+    public function getOrders(Request $request){
+        return \App\Services\Orders::getOrders($request['fromDate'], $request['toDate']);
+    }
+
+    public function deleteOrders(Request $request){
+        $param = json_decode($request->getContent(), true);
+        $delete_ids = $param['ids'];
+        $target_date = $param['target_date'];
+
+        try {
+            return \App\Services\Orders::deleteOrder($delete_ids, $target_date);
+        } catch (\Exception $e){
+            \Log::error($e);
+            abort(400, '削除に失敗しました。');
+            DB::rollBack();
+        } finally {
+            $request->flash();
+        }
+    }
+
     public function groupByItem(Request $request): \Illuminate\Support\Collection
     {
         try {
@@ -52,6 +72,11 @@ class OrdersController extends Controller
         } finally {
             $request->flash();
         }
+    }
+
+    public function report(Request $request): array
+    {
+        return \App\Services\Orders::getMonthlyReport($request['targetYear'], $request['targetMonth']);
     }
 
     public function settleShipping(Request $request){
@@ -69,8 +94,8 @@ class OrdersController extends Controller
 
     public function upload(Request $request)
     {
-        DB::beginTransaction();
         $data = mb_convert_encoding($request->getContent(), 'UTF-8', 'SJIS-win');
+        DB::beginTransaction();
         $data = preg_replace("/\r\n|\r|\n/", "\n", $data);
         $delivery_due_date = new DateTime();
         $csv = explode(PHP_EOL, $data);
@@ -185,23 +210,4 @@ class OrdersController extends Controller
         }
     }
 
-    public function getOrders(Request $request){
-        return \App\Services\Orders::getOrders($request['fromDate'], $request['toDate']);
-    }
-
-    public function deleteOrders(Request $request){
-        $param = json_decode($request->getContent(), true);
-        $delete_ids = $param['ids'];
-        $target_date = $param['target_date'];
-
-        try {
-            return \App\Services\Orders::deleteOrder($delete_ids, $target_date);
-        } catch (\Exception $e){
-            \Log::error($e);
-            abort(400, '削除に失敗しました。');
-            DB::rollBack();
-        } finally {
-            $request->flash();
-        }
-    }
 }

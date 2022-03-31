@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { OrderGroupByItem } from "../../models/order"
 import { useGetColorMaster } from "../../hooks/order"
+import type { OrderGroupByItem } from "../../models/order"
 
 type OrderGroupProps = {
     groups: OrderGroupByItem[]

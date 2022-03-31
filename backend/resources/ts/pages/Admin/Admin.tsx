@@ -16,7 +16,7 @@ const Admin: React.FC = () => {
           <div className="container-fluid">
             <Switch>
               <Route exact path={`/`}><Orders /></Route>
-              <Route exact path={`/Report`}><Reports /></Route>
+              <Route exact path={`/Reports`}><Reports /></Route>
             </Switch>
           </div>
         </div>

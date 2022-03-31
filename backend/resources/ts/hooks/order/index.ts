@@ -5,3 +5,4 @@ export { default as useSetColorMaster } from './useSetColorMaster';
 export { default as useDeleteOrder } from './useDeleteOrder';
 export { default as useGetGroupByItem } from './useGetGroupByItem';
 export { default as useSettleShipping } from './useSettleShipping';
+export { default as useGetMonthlyReport } from './useGetMonthlyReport';

@@ -36,6 +36,8 @@ Route::get('/orders/color', 'OrdersController@getColor')->name('orderGetColor');
 
 Route::post('/orders/color', 'OrdersController@setColor')->name('orderSetColor');
 
+Route::get('/orders/report', 'OrdersController@report')->name('orderMonthlyReport'); // param targetMonth targetYear
+
 Route::get('/orders/download/pickingList', 'DownloadController@pickingList')->name('downloadPickingList'); // param targetDate
 
 Route::get('/orders/download/invoice', 'DownloadController@invoice')->name('downloadInvoice'); // param targetDate
