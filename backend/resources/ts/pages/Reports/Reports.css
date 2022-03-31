@@ -24,6 +24,6 @@ tr:nth-child(2n){
 .hovered {
   background-color: rgb(230, 250, 242)!important;
 }
-.clicked {
+.selected {
   background-color: lavender!important;
 }

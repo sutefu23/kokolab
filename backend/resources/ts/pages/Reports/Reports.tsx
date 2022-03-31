@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect,useMemo } from "react";
 import dayjs from "dayjs";
 import { useGetMonthlyReport} from '../../hooks/order';
 import './Reports.css';
-import type { OrderMonthlyReport } from "../../models/order"
-
+import MultiLineChart from './Chart'
+import type { ChartProps } from "./Chart";
 const Reports :React.FC = () => {
   const [ targetYear , setTargetYear ] = useState<number>(dayjs().year())
   const [ targetMonth , setTargetMonth ] = useState<number>(dayjs().month()+1)
@@ -23,8 +23,31 @@ const Reports :React.FC = () => {
     return [...Array<number>(lastDay)].map((_, i) => i + 1)
   }, [targetMonth])
 
-  const [clickedIndex, setClickedIndex] = useState<number|null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number|null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number|undefined>(undefined);
+  const [hoveredIndex, setHoveredIndex] = useState<number|undefined>(undefined);
+
+  const chartData = useMemo(() => {
+    if(selectedIndex !==undefined && reports !== undefined){
+      const productName = Object.keys(reports)[selectedIndex]
+      const labels = Object.keys(reports[productName]).map((yyyymmdd) => new Date(yyyymmdd).getDay().toString()) //日付の配列
+      const dataset1 = Object.keys(reports[productName]).map((yyyymmdd) => reports[productName][yyyymmdd].quantity)
+      const dataset2 = Object.keys(reports[productName]).map((yyyymmdd) => reports[productName][yyyymmdd].subtotal)
+      return {
+        title: productName,
+        labels,
+        dataset1: {
+          name: "個数",
+          data: dataset1
+        },
+        dataset2: {
+          name: "金額",
+          data: dataset2
+        }
+      }
+    }
+  },[reports, selectedIndex])
+
+
   return (
   <>
     <h1 className="h3 mb-2 text-gray-800">月次集計</h1>
@@ -65,9 +88,9 @@ const Reports :React.FC = () => {
                   {i % 2 === 0?
                     <tr
                       onMouseEnter={() => setHoveredIndex(i)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      onClick={() => setClickedIndex(i)}
-                      className={`${hoveredIndex===i ? "hovered":""} ${clickedIndex===i ? "clicked":""}`}
+                      onMouseLeave={() => setHoveredIndex(undefined)}
+                      onClick={() => setSelectedIndex(i)}
+                      className={`${hoveredIndex===i ? "hovered":""} ${selectedIndex===i ? "selected":""}`}
                     >
                         <th className="product_name" rowSpan={2}>
                         {product_name}
@@ -80,8 +103,8 @@ const Reports :React.FC = () => {
                       :
                     <tr
                       onMouseEnter={() => setHoveredIndex(i-1)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      className={`${(hoveredIndex != null) && (hoveredIndex + 1)===i ? "hovered":""} ${(clickedIndex != null) && (clickedIndex + 1)===i ? "clicked":""}`}
+                      onMouseLeave={() => setHoveredIndex(undefined)}
+                      className={`${(hoveredIndex != undefined) && (hoveredIndex + 1)===i ? "hovered":""} ${(selectedIndex != undefined) && (selectedIndex + 1)===i ? "selected":""}`}
                     >
                       <th>金額</th>
                       {Object.keys(reports[product_name]).map((delivery_due_date, j) => (
@@ -96,6 +119,9 @@ const Reports :React.FC = () => {
          </div>
       </div>
    </div>
+     {chartData &&
+       <MultiLineChart {...chartData}/>
+     }
 </div>
   </>)
 }
