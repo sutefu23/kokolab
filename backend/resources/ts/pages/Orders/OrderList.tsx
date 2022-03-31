@@ -10,8 +10,9 @@ type OrderListProps = {
     onDelete: (id: Order["id"]) => void
     checkedIds: Order["id"][]
     setCheckIds: (ids: Order["id"][]) => void
+    setShowDetailOrder: (order: Order) => void
 }
-function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps): JSX.Element {
+function OrderList({orders, onDelete, checkedIds, setCheckIds, setShowDetailOrder}: OrderListProps): JSX.Element {
     const { status:getColorQueryStatus , data: colorMasterQueryData } = useGetColorMaster();
     const { mutate : setColorApi } = useSetColorMaster();
     const ref = useRef(null)
@@ -76,7 +77,7 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
       }
 
       const OrderRow = ({order}: { order: Order})  => {
-        const [ visibleDeleteButton, setVisibleDeleteButton ] = useState<boolean>(false)
+        const [ visibleOptionButton, setVisibleOptionButton ] = useState<boolean>(false)
 
         return (
             <tr className={`table-row`}
@@ -88,8 +89,8 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 key={`${order.reception_number}_${order.item_code}`}
                 data-item-code={order.item_code}
                 onContextMenu={handlePicker}
-                onMouseEnter={() => setVisibleDeleteButton(true)}
-                onMouseLeave={() => setVisibleDeleteButton(false)}
+                onMouseEnter={() => setVisibleOptionButton(true)}
+                onMouseLeave={() => setVisibleOptionButton(false)}
                 onClick={() => setVisiblePicker(false)}
                 >
                 <td>
@@ -107,6 +108,13 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 </td>
                 <th scope="row">
                     {order.reception_number} 
+                
+                {visibleOptionButton && <p
+                    style={{color: "green", fontSize:"0.8em"}}
+                    onClick={() => {
+                        setShowDetailOrder(order)
+                    }}                
+                >詳細</p>}
                 </th>
                 <td>{order.item_code }
                 </td>
@@ -115,7 +123,7 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds}: OrderListProps):
                 </td>
                 <td>{order.quantity}</td>
                 <td>{order.inclusive_sum?.toLocaleString()}
-                {!order.is_shipping_fixed && visibleDeleteButton && 
+                {!order.is_shipping_fixed && visibleOptionButton && 
                     <i
                     className="fa-solid fa-trash-can"
                     style={{color:"red", fontSize:"0.85em", display:"inline-block", fontWeight:"normal"}}

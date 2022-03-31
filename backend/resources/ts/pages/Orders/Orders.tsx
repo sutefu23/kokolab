@@ -2,6 +2,7 @@ import React, { Fragment, useState, useCallback, useEffect } from "react";
 import dayjs from 'dayjs'
 import OrderList from "./OrderList";
 import OrderGroup from "./OrderGroup";
+import OrderDetail from  "./OrderDetail"
 import  "./Orders.css";
 import TopCard from "../../common/components/TopCard";
 import FileUploader from "../../common/components/FileUploder";
@@ -9,7 +10,7 @@ import Notification from "../../common/components/Notification";
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs"
 import {useUploadCSV, useGetOrdersQuery, useGetGroupByItem, useDeleteOrder, useSettleShipping} from "../../hooks/order";
 import type { Order } from "../../models/order"
-
+    
 const Tabs = {
     ITEM_LIST: 'ITEM_LIST',
     ITEM_GROUP: 'ITEM_GROUP',
@@ -34,6 +35,7 @@ const Orders: React.FC = () => {
 
     const [ selectedIds, setSelectedIds ] = useState<Order["id"][]>([])
 
+    const [showDetailOrder , setShowDetailOrder ] = useState<Order|undefined>()
 
     useEffect(() => {
         if (orderStatus === "success") {
@@ -204,6 +206,7 @@ const Orders: React.FC = () => {
                                 onDelete={(id) => deleteOrders([id])}
                                 checkedIds={selectedIds}
                                 setCheckIds={setSelectedIds}
+                                setShowDetailOrder={setShowDetailOrder}
                                 />
                             }
                             {groups && tab == Tabs.ITEM_GROUP &&
@@ -247,6 +250,9 @@ const Orders: React.FC = () => {
                 <a href={`/api/orders/download/pickingList/?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
                 <a href={`/api/orders/download/invoice?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
             </React.Fragment>
+            }
+            {
+            <OrderDetail order={showDetailOrder} isShow={Boolean(showDetailOrder)} onClose={() => setShowDetailOrder(undefined)}/>
             }
         </Fragment>
     )
