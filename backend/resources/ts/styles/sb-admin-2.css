@@ -10083,9 +10083,16 @@ a:focus {
 .sidebar.collapsed{
   width: 3.5rem;
 }
-
+.sidebar .nav-item .nav-link span{
+  transition: opacity .1s .1s;
+}
+.sidebar.collapsed .nav-item .nav-link{
+  position: relative;
+}
 .sidebar.collapsed .nav-item .nav-link span{
-  display: none;
+  opacity: 0;
+  position: absolute;
+  transition: opacity .1s;
 }
 
 .sidebar .nav-item {
