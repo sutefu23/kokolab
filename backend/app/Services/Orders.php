@@ -88,15 +88,16 @@ class Orders{
         foreach ($item_masters as $item){//item codeの配列
             $item_code = $item->item_code;
             $product_name = $item->product_name;
+            $return[$product_name] = [];
             for ($d = 1; $d <= $days; $d++){//1～末日までの配列
                 $ymd = $yearMonth . '-' . sprintf('%02d',$d);
                 foreach ($group_data as $data){
                     if($data->item_code == $item_code && $data->delivery_due_date == $ymd){
-                        $return[$product_name][$ymd]['quantity'] = $data->quantity;
+                        $return[$product_name][$ymd]['count'] = $data->count;
                         $return[$product_name][$ymd]['subtotal'] = $data->subtotal;
                     }else{
-                        if(!isset($return[$product_name][$ymd]['quantity'])){
-                            $return[$product_name][$ymd]['quantity'] = 0;
+                        if(!isset($return[$product_name][$ymd]['count'])){
+                            $return[$product_name][$ymd]['count'] = 0;
                         }
                         if(!isset($return[$product_name][$ymd]['subtotal'])) {
                             $return[$product_name][$ymd]['subtotal'] = 0;
@@ -105,6 +106,7 @@ class Orders{
                 }
             }
         }
+        debug($return);
         return $return;
     }
     /**
@@ -116,7 +118,7 @@ class Orders{
     public static function groupByItem(string $fromDate, string $toDate): Collection
     {
         return DB::table('orders')
-            ->selectRaw('delivery_due_date, item_code, product_name, sum(quantity) as quantity, sum(subtotal) as subtotal')
+            ->selectRaw('delivery_due_date, item_code, product_name, sum(quantity) as quantity, sum(subtotal) as subtotal , count(item_code) as count')
             ->groupBy(['delivery_due_date', 'item_code', 'product_name'])
             ->orderByRaw('delivery_due_date, CONVERT(item_code, UNSIGNED INTEGER )')
             ->whereBetween('delivery_due_date',[self::_getQueryDate($fromDate), self::_getQueryDate($toDate)])

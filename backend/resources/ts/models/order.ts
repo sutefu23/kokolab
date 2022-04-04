@@ -110,7 +110,7 @@ export type OrderGroupByItem = {//商品コードごとに集計したデータ
 export type OrderMonthlyReport = {
   [item_code:string]: {
     [delivery_due_date: string]: {
-      quantity: number,
+      count: number,
       subtotal: number
     }
   }

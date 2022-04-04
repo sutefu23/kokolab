@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { useGetMonthlyReport} from '../../hooks/order';
 import './Reports.css';
 import MultiLineChart from './Chart'
-import type { ChartProps } from "./Chart";
 const Reports :React.FC = () => {
   const [ targetYear , setTargetYear ] = useState<number>(dayjs().year())
   const [ targetMonth , setTargetMonth ] = useState<number>(dayjs().month()+1)
@@ -29,14 +28,14 @@ const Reports :React.FC = () => {
   const chartData = useMemo(() => {
     if(selectedIndex !==undefined && reports !== undefined){
       const productName = Object.keys(reports)[selectedIndex]
-      const labels = Object.keys(reports[productName]).map((yyyymmdd) => new Date(yyyymmdd).getDay().toString()) //日付の配列
-      const dataset1 = Object.keys(reports[productName]).map((yyyymmdd) => reports[productName][yyyymmdd].quantity)
+      const labels = Object.keys(reports[productName]).map((yyyymmdd) => dayjs(yyyymmdd).format("DD")) //日付の配列
+      const dataset1 = Object.keys(reports[productName]).map((yyyymmdd) => reports[productName][yyyymmdd].count)
       const dataset2 = Object.keys(reports[productName]).map((yyyymmdd) => reports[productName][yyyymmdd].subtotal)
       return {
         title: productName,
         labels,
         dataset1: {
-          name: "個数",
+          name: "件数",
           data: dataset1
         },
         dataset2: {
@@ -47,6 +46,27 @@ const Reports :React.FC = () => {
     }
   },[reports, selectedIndex])
 
+  const MultiChartMemorized = useMemo(() => chartData && <MultiLineChart {...chartData}/>,[chartData])
+
+  const dailyTotal = useCallback((product_name: string) => {
+    if(!reports){ return { totalCount: 0, totalSubtotal: 0}}
+    const productDataArray = Object.keys(reports[product_name]).map((delivery_due_date, j) => (
+      {
+        count: reports[product_name][delivery_due_date].count,
+        subtotal: reports[product_name][delivery_due_date].subtotal
+      }
+    ))
+    const totalCount = productDataArray.reduce((prev, product) => {
+      return prev + Number(product.count)
+    }, 0)
+    const totalSubtotal = productDataArray.reduce((prev, product) => {
+      return prev + Number(product.subtotal)
+    }, 0)
+    return {
+      totalCount,
+      totalSubtotal
+    }
+  },[reports])
 
   return (
   <>
@@ -75,6 +95,7 @@ const Reports :React.FC = () => {
                <thead className="thead-light">
                 <tr>
                   <th colSpan={2}>商品名</th>
+                  <th>合計</th>
                   {days().map((d) => (
                   <th key={d}>
                   {d}
@@ -85,33 +106,36 @@ const Reports :React.FC = () => {
                <tbody>
                {reports && Object.keys(reports).map((product_name, i) => (
                 <React.Fragment key={i}>
-                  {i % 2 === 0?
                     <tr
                       onMouseEnter={() => setHoveredIndex(i)}
                       onMouseLeave={() => setHoveredIndex(undefined)}
                       onClick={() => setSelectedIndex(i)}
                       className={`${hoveredIndex===i ? "hovered":""} ${selectedIndex===i ? "selected":""}`}
                     >
-                        <th className="product_name" rowSpan={2}>
-                        {product_name}
-                        </th>
-                        <th>個数</th>
-                        {Object.keys(reports[product_name]).map((delivery_due_date, j) => (
-                          <td key={j}>{reports[product_name][delivery_due_date].quantity}</td>
-                        ))}
-                        </tr>
-                      :
+                      <th className="product_name" rowSpan={2}>
+                      {product_name}
+                      </th>
+                      <th>件数</th>
+                      <td className="total">
+                      {dailyTotal(product_name).totalCount}
+                      </td>
+                      {Object.keys(reports[product_name]).map((delivery_due_date, j) => (
+                        <td key={j}>{reports[product_name][delivery_due_date].count}</td>
+                      ))}
+                      </tr>
                     <tr
                       onMouseEnter={() => setHoveredIndex(i-1)}
                       onMouseLeave={() => setHoveredIndex(undefined)}
-                      className={`${(hoveredIndex != undefined) && (hoveredIndex + 1)===i ? "hovered":""} ${(selectedIndex != undefined) && (selectedIndex + 1)===i ? "selected":""}`}
+                      className={`${(hoveredIndex != undefined) && hoveredIndex===i ? "hovered":""} ${(selectedIndex != undefined) && selectedIndex===i ? "selected":""}`}
                     >
                       <th>金額</th>
+                      <td className="total">
+                        {dailyTotal(product_name).totalSubtotal}
+                      </td>
                       {Object.keys(reports[product_name]).map((delivery_due_date, j) => (
                         <td key={j}>{Number(reports[product_name][delivery_due_date].subtotal).toLocaleString('ja-JP')}</td>
                       ))}
                     </tr>
-                  }
                   </React.Fragment>
               ))}
                </tbody>
@@ -119,9 +143,7 @@ const Reports :React.FC = () => {
          </div>
       </div>
    </div>
-     {chartData &&
-       <MultiLineChart {...chartData}/>
-     }
+     {MultiChartMemorized}
 </div>
   </>)
 }

@@ -19,6 +19,9 @@ td{
 .report-list td{
   text-align: right;
 }
+.report-list .total{
+  font-weight: bold;
+}
 tr:nth-child(2n){
   background-color: #eee;
 }
@@ -28,4 +31,7 @@ tr:nth-child(2n){
 }
 .selected {
   background-color: lavender!important;
+}
+.table thead th{
+  text-align: center;
 }

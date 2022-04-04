@@ -116,12 +116,10 @@ const Orders: React.FC = () => {
     )
     const orderCount = useCallback(
         () => {
-            return orders?.reduce<Array<string>>((keys: Array<string>, order) => {
-                if (!keys.find((k) => k === order.reception_number)){
-                    keys.push(order.reception_number)
-                }
-                return keys
-            },[]).length ?? 0
+            if(!orders) return 0
+            return orders.reduce<number>((total, order) => {
+                return total + Number(order.quantity)
+            },0)
         },
         [orders]
     )
