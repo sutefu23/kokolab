@@ -9,6 +9,7 @@ import { AccountRoute } from "./common/components/AccountRoute";
 import { useQueryClient } from "react-query";
 import useGetUserQuery from "./hooks/user/useGetUserQuery";
 import Loading from "./common/components/Loading";
+import { RecoilRoot } from "recoil";
 
 
 const App: React.FC = () => {
@@ -30,7 +31,9 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <PrivateRoute path="/">
+            <RecoilRoot>
             <Admin />
+            </RecoilRoot>
           </PrivateRoute>
           <AccountRoute path="/login"><Login /></AccountRoute>
         </Switch>

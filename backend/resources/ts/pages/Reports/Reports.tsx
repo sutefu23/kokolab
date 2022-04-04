@@ -124,9 +124,10 @@ const Reports :React.FC = () => {
                       ))}
                       </tr>
                     <tr
-                      onMouseEnter={() => setHoveredIndex(i-1)}
+                      onMouseEnter={() => setHoveredIndex(i)}
                       onMouseLeave={() => setHoveredIndex(undefined)}
-                      className={`${(hoveredIndex != undefined) && hoveredIndex===i ? "hovered":""} ${(selectedIndex != undefined) && selectedIndex===i ? "selected":""}`}
+                      onClick={() => setSelectedIndex(i)}
+                      className={`${hoveredIndex===i ? "hovered":""} ${selectedIndex===i ? "selected":""}`}
                     >
                       <th>金額</th>
                       <td className="total">

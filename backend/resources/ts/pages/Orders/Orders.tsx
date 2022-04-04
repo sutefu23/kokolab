@@ -9,6 +9,7 @@ import FileUploader from "../../common/components/FileUploder";
 import Notification from "../../common/components/Notification";
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs"
 import {useUploadCSV, useGetOrdersQuery, useGetGroupByItem, useDeleteOrder, useSettleShipping} from "../../hooks/order";
+import { useOrderQueryDate } from "../../stores"
 import type { Order } from "../../models/order"
     
 const Tabs = {
@@ -17,7 +18,7 @@ const Tabs = {
 } as const
 
 const Orders: React.FC = () => {
-    const [ queryDate, setQueryDate ] = useState<Order["delivery_due_date"]>(new Date());
+    const [ queryDate, setQueryDate ] = useOrderQueryDate();
 
     const { status:orderStatus , data: orderData , error: orderErr } = useGetOrdersQuery({fromDate: queryDate, toDate: queryDate});
     const { status:groupStatus , data: groupData , error: groupErr } = useGetGroupByItem({fromDate: queryDate, toDate: queryDate});
@@ -103,7 +104,7 @@ const Orders: React.FC = () => {
                 }
               );
         },
-        [file, uploadCSVApi]
+        [file, setQueryDate, uploadCSVApi]
     )
     
     const orderSum = useCallback(
