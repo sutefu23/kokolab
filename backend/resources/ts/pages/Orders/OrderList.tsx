@@ -10,9 +10,10 @@ type OrderListProps = {
     onDelete: (id: Order["id"]) => void
     checkedIds: Order["id"][]
     setCheckIds: (ids: Order["id"][]) => void
-    setShowDetailOrder: (order: Order) => void
+    setShowDetailOrder: (order: Order|undefined) => void
+    showDetailOrderId: Order["id"]|undefined
 }
-function OrderList({orders, onDelete, checkedIds, setCheckIds, setShowDetailOrder}: OrderListProps): JSX.Element {
+function OrderList({orders, onDelete, checkedIds, setCheckIds, setShowDetailOrder, showDetailOrderId}: OrderListProps): JSX.Element {
     const { status:getColorQueryStatus , data: colorMasterQueryData } = useGetColorMaster();
     const { mutate : setColorApi } = useSetColorMaster();
     const ref = useRef(null)
@@ -109,12 +110,18 @@ function OrderList({orders, onDelete, checkedIds, setCheckIds, setShowDetailOrde
                 <th scope="row">
                     {order.reception_number} 
                 
-                {visibleOptionButton && <p
-                    style={{color: "green", fontSize:"0.8em"}}
-                    onClick={() => {
-                        setShowDetailOrder(order)
-                    }}                
-                >詳細</p>}
+                {visibleOptionButton && 
+                    (showDetailOrderId !== order.id ? 
+                    <p
+                        style={{color: "green", fontSize:"0.8em"}}
+                        onClick={() => setShowDetailOrder(order)}                
+                    >詳細</p>
+                        : //選択されている詳細データと同じものだったらウィンドウを閉じる
+                        <p
+                        style={{color: "red", fontSize:"0.8em"}}
+                        onClick={() => setShowDetailOrder(undefined)}               
+                    >閉じる</p>
+                    )}
                 </th>
                 <td>{order.item_code }
                 </td>

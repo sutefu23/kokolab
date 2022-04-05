@@ -206,6 +206,7 @@ const Orders: React.FC = () => {
                                 checkedIds={selectedIds}
                                 setCheckIds={setSelectedIds}
                                 setShowDetailOrder={setShowDetailOrder}
+                                showDetailOrderId={showDetailOrder?.id}
                                 />
                             }
                             {groups && tab == Tabs.ITEM_GROUP &&
