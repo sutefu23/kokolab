@@ -2,7 +2,7 @@
 namespace App\Exports\Traits;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
+use PhpOffice\PhpSpreadsheet\Style\Border;
 trait SheetColorable
 {
     /**
@@ -24,4 +24,5 @@ trait SheetColorable
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB(str_replace("#","",$colorCode));
     }
+
 }

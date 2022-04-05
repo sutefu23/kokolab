@@ -2,6 +2,7 @@
 namespace App\Exports\Traits;
 
 use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 trait SheetBorderable
@@ -29,5 +30,25 @@ trait SheetBorderable
         ];
 
         $sheet->getStyle($xls_coordinate)->applyFromArray($styleArray);
+    }
+    /**
+     * @param Worksheet $sheet
+     * @param int $row
+     * @param string $col
+     * @param string $colorCode
+     * @return void
+     */
+    public static function setRowBorderColor(Worksheet &$sheet , int $row, string $col, string $colorCode)
+    {
+        $xls_coordinate = "A". $row .":" . $col . $row;
+        $border_style= [
+            'borders' =>  [
+                'outline' =>  [
+                    'borderStyle' => Border::BORDER_THICK,
+                    'color' =>  ['argb' => str_replace("#","",$colorCode)]
+                ]
+            ]
+        ];
+        $sheet->getStyle($xls_coordinate)->applyFromArray($border_style);
     }
 }
