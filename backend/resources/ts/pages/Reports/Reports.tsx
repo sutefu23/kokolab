@@ -1,19 +1,16 @@
-import React, { useState, useCallback, useEffect,useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import dayjs from "dayjs";
 import { useGetMonthlyReport} from '../../hooks/order';
 import './Reports.css';
-import MultiBarChart from './MultiBarChart'
+import DisplayChart from './DisplayChart'
 import { OrderMonthlyReport} from '../../models/order';
 
 const Reports :React.FC = () => {
   const [ targetYear , setTargetYear ] = useState<number>(dayjs().year())
   const [ targetMonth , setTargetMonth ] = useState<number>(dayjs().month()+1)
 
-
-  const { status:reportStatus , data: reportData , error: reportErr } = useGetMonthlyReport({targetYear, targetMonth});
-  const { status:reportPrevStatus , data: reportPrevData , error: reportPrevErr } = useGetMonthlyReport({targetYear, targetMonth});
+  const { status:reportStatus , data: reportData } = useGetMonthlyReport({targetYear, targetMonth});
   const [ reports, setReports ] = useState<typeof reportData>(reportData)
-  const [ prevReports, setPrevReports ] = useState<typeof reportData>(undefined)
 
   useEffect(() => {
     if (reportStatus === "success") {
@@ -28,33 +25,6 @@ const Reports :React.FC = () => {
 
   const [selectedIndex, setSelectedIndex] = useState<number|undefined>(undefined);
   const [hoveredIndex, setHoveredIndex] = useState<number|undefined>(undefined);
-  const [isShowHistoryData, setIsShowHistoryData] = useState(false)
-
-  const chartData = useMemo(() => {
-    if(selectedIndex !==undefined && reports !== undefined){
-      const productName = reports[selectedIndex].product_name
-      const days = reports[selectedIndex].daily_summary.map((data) => dayjs(data.day).format("DD"))
-      const counts = reports[selectedIndex].daily_summary.map((data) => data.count)
-      const subtotals = reports[selectedIndex].daily_summary.map((data) => data.subtotal)
-      return {
-        title: productName,
-        labels: days,
-        dataset1: {
-          name: "件数",
-          data: counts
-        },
-        dataset2: {
-          name: "金額",
-          data: subtotals
-        }
-      }
-    }
-  },[reports, selectedIndex])
-
-
-
-
-  const MultiChartMemorized = useMemo(() => chartData && <MultiBarChart {...chartData}/>,[chartData])
 
   const dailyTotal = useCallback((report: OrderMonthlyReport) => {
     if(!reports){ return { totalCount: 0, totalSubtotal: 0}}
@@ -148,14 +118,8 @@ const Reports :React.FC = () => {
       </div>
    </div>
    {
-     selectedIndex !== undefined && 
-     <>
-      <label>
-      <input type="checkbox" checked={isShowHistoryData} onChange={(e) => setIsShowHistoryData(e.target.checked)}/>
-        過去のデータと比較する
-      </label>
-     {MultiChartMemorized}
-     </>
+     selectedIndex !== undefined && reports !== undefined &&
+     <DisplayChart report={reports[selectedIndex]}/>
    }
 </div>
   </>)

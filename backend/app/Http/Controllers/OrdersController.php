@@ -76,7 +76,7 @@ class OrdersController extends Controller
 
     public function report(Request $request): array
     {
-        return \App\Services\Orders::getMonthlyReport($request['targetYear'], $request['targetMonth']);
+        return \App\Services\Orders::getMonthlyReport($request['targetYear'], $request['targetMonth'], $request['itemCode']);
     }
 
     public function settleShipping(Request $request){

@@ -2,6 +2,7 @@
 namespace App\Services;
 use DateTime;
 use DateTimeZone;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Orders{
     //DBで検索に使うため、Y-m-d H:i:sの形からタイムゾーンを考慮したY-m-dの形にします。
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private static function _getQueryDate(string $targetDate): string
     {
@@ -34,7 +35,7 @@ class Orders{
     /**
      * @param array $delete_ids
      * @return Collection
-     * @throws \Exception
+     * @throws Exception
      */
     public static function deleteOrder(array $delete_ids, string $target_date): Collection
     {
@@ -46,7 +47,7 @@ class Orders{
             DB::table('orders')->where('delivery_due_date', self::_getQueryDate($target_date))->get();
             debug(DB::getQueryLog());
             return DB::table('orders')->where('delivery_due_date', self::_getQueryDate($target_date))->get();
-        }catch (\Exception $e){
+        }catch (Exception $e){
             DB::rollBack();
             throw $e;
         }
@@ -55,7 +56,7 @@ class Orders{
     /**
      * @param array $ids
      * @return Collection
-     * @throws \Exception
+     * @throws Exception
      */
     public static function settleShipping(array $ids, string $target_date): Collection
     {
@@ -64,7 +65,7 @@ class Orders{
             DB::table('orders')->where('delivery_due_date', self::_getQueryDate($target_date))->whereIn('id', $ids)->update(['is_shipping_fixed' => true]);
             DB::commit();
             return DB::table('orders')->where('delivery_due_date', self::_getQueryDate($target_date))->get();
-        }catch (\Exception $e){
+        }catch (Exception $e){
             DB::rollBack();
             throw $e;
         }
@@ -73,22 +74,23 @@ class Orders{
     /**
      * @param int $targetYear
      * @param int $targetMonth
+     * @param string|null $itemCode
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function getMonthlyReport(int $targetYear, int $targetMonth, string $productName = null): array
+    public static function getMonthlyReport(int $targetYear, int $targetMonth, string $itemCode = null): array
     {
         $yearMonth = $targetYear. '-' .sprintf('%02d', $targetMonth); // YYYY-mm
         $firstDate = date('Y-m-d', strtotime('first day of ' . $yearMonth));
         $lastDate = date('Y-m-d', strtotime('last day of ' . $yearMonth));
         $days = date('d', strtotime($lastDate));
-        $item_masters =  DB::table('orders')->select(['item_code','product_name'])->groupBy(['item_code', 'product_name'])->orderBy('item_code')->whereBetween('delivery_due_date',[self::_getQueryDate($firstDate), self::_getQueryDate($lastDate)])->get();
-        $order_data = self::groupByItem($firstDate, $lastDate);
+        $query =  DB::table('orders')->select(['item_code','product_name'])->groupBy(['item_code', 'product_name'])->orderBy('item_code')->whereBetween('delivery_due_date',[self::_getQueryDate($firstDate), self::_getQueryDate($lastDate)]);
+        $item_masters = $query->get();
+        $order_data = self::groupByItem($firstDate, $lastDate, $itemCode);
         $grouped = [];
         foreach ($item_masters as $item){//item codeの配列
             $item_code = $item->item_code;
-            $product_name = $item->product_name;
-            $item_key = serialize($item);//集計する為にキー化するが、あとで取り出す為にシリアライズする
+            $item_key = serialize($item);//グループ化する為にキー化するが、あとで取り出す為にシリアライズする
             $grouped[$item_key] = [];
             for ($d = 1; $d <= $days; $d++){//1～末日までの配列
                 $ymd = $yearMonth . '-' . sprintf('%02d',$d);
@@ -127,33 +129,38 @@ class Orders{
         }
         return $return;
     }
+
     /**
      * @param string $fromDate
      * @param string $toDate
+     * @param string|null $itemCode
      * @return Collection
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function groupByItem(string $fromDate, string $toDate, string $productName = null): Collection
+    public static function groupByItem(string $fromDate, string $toDate, string $itemCode = null): Collection
     {
-        return DB::table('orders')
+        $query = DB::table('orders')
             ->selectRaw('delivery_due_date, item_code, product_name, sum(quantity) as quantity, sum(subtotal) as subtotal , count(item_code) as count')
             ->groupBy(['delivery_due_date', 'item_code', 'product_name'])
             ->orderByRaw('delivery_due_date, CONVERT(item_code, UNSIGNED INTEGER )')
-            ->whereBetween('delivery_due_date',[self::_getQueryDate($fromDate), self::_getQueryDate($toDate)])
-            ->get();
+            ->whereBetween('delivery_due_date',[self::_getQueryDate($fromDate), self::_getQueryDate($toDate)]);
+        if($itemCode){
+            $query->where('item_code', $itemCode);
+        }
+        return $query->get();
     }
 
     /**
      * CSVの一行からOrderレコードを生成（カンマ区切り）
      * @param $row
      * @return \App\Models\Orders
-     * @throws \Exception
+     * @throws Exception
      */
     public static function csv_row_to_order($csv_body){
         try {
             $order = new \App\Models\Orders;
             return $order;
-        } catch (\Exception $e){
+        } catch (Exception $e){
             \Log::error($e);
             throw $e;
         }

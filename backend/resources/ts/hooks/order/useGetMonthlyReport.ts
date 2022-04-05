@@ -2,19 +2,20 @@ import { QueryObserverResult, useQuery, UseQueryOptions } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { OrderMonthlyReport} from '../../models/order';
 
-type QueryParam = {
+export type QueryParam = {
   targetYear: number
-  targetMonth: number
+  targetMonth: number,
+  itemCode?: string
 }
 
-const getMonthlyReport = async ({targetYear, targetMonth}:QueryParam): Promise<OrderMonthlyReport[]> => {
-  const { data } = await axios.get<OrderMonthlyReport[]>('/api/orders/report',{ params: { targetYear, targetMonth }});
+const getMonthlyReport = async ({targetYear, targetMonth, itemCode}:QueryParam): Promise<OrderMonthlyReport[]> => {
+  const { data } = await axios.get<OrderMonthlyReport[]>('/api/orders/report',{ params: { targetYear, targetMonth, itemCode }});
   return data;
 };
 
-const useGetMonthlyReportQuery = <TData = OrderMonthlyReport[]>({targetYear, targetMonth}: QueryParam,
+const useGetMonthlyReportQuery = <TData = OrderMonthlyReport[]>({targetYear, targetMonth, itemCode}: QueryParam,
   options?: UseQueryOptions<OrderMonthlyReport[], AxiosError, TData>
 ): QueryObserverResult<TData, AxiosError> =>
-  useQuery(['groupByItem', targetYear, targetMonth], () => getMonthlyReport({targetYear, targetMonth}), options);
+  useQuery(['groupByItem', targetYear, targetMonth], () => getMonthlyReport({targetYear, targetMonth, itemCode}), options);
 
 export default useGetMonthlyReportQuery;
