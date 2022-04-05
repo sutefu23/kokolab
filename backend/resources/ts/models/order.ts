@@ -108,10 +108,13 @@ export type OrderGroupByItem = {//商品コードごとに集計したデータ
 }
 
 export type OrderMonthlyReport = {
-  [item_code:string]: {
-    [delivery_due_date: string]: {
-      count: number,
-      subtotal: number
-    }
-  }
+  item_code: string,
+  product_name: string,
+  daily_summary: DailySummarly[]
+}
+
+type DailySummarly = {
+  day: Date,
+  count: number,
+  subtotal: number
 }

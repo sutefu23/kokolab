@@ -76,37 +76,55 @@ class Orders{
      * @return array
      * @throws \Exception
      */
-    public static function getMonthlyReport(int $targetYear, int $targetMonth): array
+    public static function getMonthlyReport(int $targetYear, int $targetMonth, string $productName = null): array
     {
         $yearMonth = $targetYear. '-' .sprintf('%02d', $targetMonth); // YYYY-mm
         $firstDate = date('Y-m-d', strtotime('first day of ' . $yearMonth));
         $lastDate = date('Y-m-d', strtotime('last day of ' . $yearMonth));
         $days = date('d', strtotime($lastDate));
         $item_masters =  DB::table('orders')->select(['item_code','product_name'])->groupBy(['item_code', 'product_name'])->orderBy('item_code')->whereBetween('delivery_due_date',[self::_getQueryDate($firstDate), self::_getQueryDate($lastDate)])->get();
-        $group_data = self::groupByItem($firstDate, $lastDate);
-        $return = [];
+        $order_data = self::groupByItem($firstDate, $lastDate);
+        $grouped = [];
         foreach ($item_masters as $item){//item codeの配列
             $item_code = $item->item_code;
             $product_name = $item->product_name;
-            $return[$product_name] = [];
+            $item_key = serialize($item);//集計する為にキー化するが、あとで取り出す為にシリアライズする
+            $grouped[$item_key] = [];
             for ($d = 1; $d <= $days; $d++){//1～末日までの配列
                 $ymd = $yearMonth . '-' . sprintf('%02d',$d);
-                foreach ($group_data as $data){
-                    if($data->item_code == $item_code && $data->delivery_due_date == $ymd){
-                        $return[$product_name][$ymd]['count'] = $data->count;
-                        $return[$product_name][$ymd]['subtotal'] = $data->subtotal;
+                foreach ($order_data as $order){
+                    if($order->item_code == $item_code && $order->delivery_due_date == $ymd){
+                        $grouped[$item_key][$ymd]['count'] = $order->count;
+                        $grouped[$item_key][$ymd]['subtotal'] = $order->subtotal;
                     }else{
-                        if(!isset($return[$product_name][$ymd]['count'])){
-                            $return[$product_name][$ymd]['count'] = 0;
+                        if(!isset($grouped[$item_key][$ymd]['count'])){
+                            $grouped[$item_key][$ymd]['count'] = 0;
                         }
-                        if(!isset($return[$product_name][$ymd]['subtotal'])) {
-                            $return[$product_name][$ymd]['subtotal'] = 0;
+                        if(!isset($grouped[$item_key][$ymd]['subtotal'])) {
+                            $grouped[$item_key][$ymd]['subtotal'] = 0;
                         }
                     }
                 }
             }
         }
-        debug($return);
+        // JSで使いやすいKeyValueの形に修正
+        $return = [];
+        foreach ($grouped as $item_key => $daily_data){
+            $item = unserialize($item_key);
+            $daily_summary = [];
+            foreach ($daily_data as $ymd => $data){
+                $daily_summary[] = [
+                        'day' => $ymd,
+                        'count' => $data['count'],
+                        'subtotal' => $data['subtotal']
+                    ];
+            }
+            $return[] = [
+                'item_code' => $item->item_code,
+                'product_name' => $item->product_name,
+                'daily_summary' => $daily_summary
+            ];
+        }
         return $return;
     }
     /**
@@ -115,7 +133,7 @@ class Orders{
      * @return Collection
      * @throws \Exception
      */
-    public static function groupByItem(string $fromDate, string $toDate): Collection
+    public static function groupByItem(string $fromDate, string $toDate, string $productName = null): Collection
     {
         return DB::table('orders')
             ->selectRaw('delivery_due_date, item_code, product_name, sum(quantity) as quantity, sum(subtotal) as subtotal , count(item_code) as count')

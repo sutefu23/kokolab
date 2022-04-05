@@ -31,10 +31,18 @@ export type ChartProps = {
   dataset2:{
     name: string,
     data: number[]
+  },
+  dataset3?: {
+    name: string,
+    data: number[]
+  },
+  dataset4?:{
+    name: string,
+    data: number[]
   }
 }
 
-const MultiLineChart = ({title, labels, dataset1, dataset2}:ChartProps):JSX.Element => {
+const MultiLineChart = ({title, labels, dataset1, dataset2, dataset3, dataset4}:ChartProps):JSX.Element => {
   const options = useMemo(() => {
     return {
       responsive: true,
@@ -64,12 +72,27 @@ const MultiLineChart = ({title, labels, dataset1, dataset2}:ChartProps):JSX.Elem
             drawOnChartArea: false,
           },
         },
+        y3: {
+          type: 'linear' as const,
+          display: Boolean(dataset3),
+          position: 'left' as const,
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+        y4: {
+          type: 'linear' as const,
+          display: Boolean(dataset4),
+          position: 'right' as const,
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
       },
     };
-  },[title])
-  const graphData = {
-    labels: labels,
-    datasets: [
+  },[dataset3, dataset4, title])
+  
+  const dataSets = [
       {
         label: dataset1.name,
         data: dataset1.data,
@@ -82,7 +105,24 @@ const MultiLineChart = ({title, labels, dataset1, dataset2}:ChartProps):JSX.Elem
         borderColor: "rgb(75, 100, 192)",
         yAxisID: 'y2',
       },
-    ],
+      (dataset3)? {
+        label: dataset3.name,
+        data: dataset3.data,
+        borderColor: "rgba(75, 192, 192, 0.4)",
+        yAxisID: 'y3',
+      }: undefined,
+      (dataset4)? {
+        label: dataset4.name,
+        data: dataset4.data,
+        borderColor: "rgba(75, 100, 192, 0.4)",
+        yAxisID: 'y4',
+      }: undefined,
+    ]
+
+  
+  const graphData = {
+    labels: labels,
+    datasets: dataSets.filter((data):data is NonNullable<typeof data> => data !== undefined),
   };
 
 
