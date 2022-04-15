@@ -21,6 +21,7 @@ const DisplayChart = ({report}:DisplayChartProps) => {
 
   useEffect(() => {
     if(!isShowHistoryData) return 
+    if(!prevReportData) return 
     if(prevReportStatus === 'success' ){
       setPrevReport(prevReportData[0])
     }

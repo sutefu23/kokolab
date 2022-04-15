@@ -239,14 +239,17 @@ const Orders: React.FC = () => {
                         }
                     }}
                 >出荷削除</div>
-                {/* <div className="btn btn-info mb-4 ml-4"
+                <div className="btn btn-info mb-4 ml-4"
                     onClick={(e) => {
                         e.preventDefault()
+                        if(orderCount() === 0) {
+                            return 
+                        }
                         if(confirm(`表示されている${orderCount().toString()}件の出荷を確定します`)){
                             settleShipping()
                         }
                     }}
-                >出荷確定</div> */}
+                >出荷確定</div>
                 <a href={`/api/orders/download/pickingList/?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success mb-4 ml-4" target="_blank">ピッキングリスト</a>
                 <a href={`/api/orders/download/invoice?targetDate=${dayjs(queryDate).format('YYYY-MM-DD')}`} rel="noreferrer" className="btn btn-success ml-4 mb-4" target="_blank">納品書</a>
             </React.Fragment>
