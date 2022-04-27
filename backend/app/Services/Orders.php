@@ -29,7 +29,39 @@ class Orders{
         if(!$toDate){
             $toDate = $fromDate;
         }
-        return DB::table('orders')->whereBetween('delivery_due_date', [self::_getQueryDate($fromDate), self::_getQueryDate($toDate)])->get();
+        return DB::table('orders')
+            ->whereBetween('delivery_due_date', [self::_getQueryDate($fromDate), self::_getQueryDate($toDate)])
+            ->orderByRaw("
+                CASE
+                    WHEN feces_type = '日本郵便（ポスト投函） ' THEN 1
+                    WHEN feces_type = '佐川急便' THEN 2
+                    WHEN feces_type = 'ヤマトメール便' THEN 3
+                    WHEN feces_type = 'ヤマト宅急便' THEN 4
+                    WHEN feces_type = '日本郵便（対面配達・手数料600円）' THEN 5
+                    WHEN feces_type = '佐川急便（飛脚クール便）' THEN 6
+                    WHEN feces_type = 'ヤマト宅急便（クール宅急便）' THEN 7
+                    WHEN feces_type = '日本郵便（ポスト投函）（冷蔵・冷凍）' THEN 8
+                    WHEN feces_type = '日本郵便（対面配達・手数料600円）（冷蔵・冷凍）' THEN 9
+                    WHEN feces_type = 'ヤマト宅急便コンパクト' THEN 10
+                    WHEN feces_type = 'ヤマトネコポス' THEN 11
+                    WHEN feces_type = 'ヤマトクロネコDM便' THEN 12
+                    ELSE 999
+                END,
+                CASE
+                    WHEN payment_methods = 'NP(後払いwiz)' THEN 1
+                    WHEN payment_methods = '代引き' THEN 2
+                    WHEN payment_methods = 'クレジットカード' THEN 3
+                    WHEN payment_methods = 'NP(後払い)' THEN 4
+                    WHEN payment_methods = 'GMO後払い' THEN 5
+                    WHEN payment_methods = '楽天ペイ（オンライン決済）' THEN 6
+                    WHEN payment_methods = 'Amazon Pay' THEN 7
+                    ELSE 999
+                END,
+                reception_number, -- 受付番号
+                delivery_due_date, -- 発送予定日
+                order_id -- 注文ID
+            ")
+            ->get();
     }
 
     /**
