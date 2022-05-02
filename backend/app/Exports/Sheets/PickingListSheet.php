@@ -44,7 +44,7 @@ class PickingListSheet implements FromCollection, WithMapping, WithHeadings, Wit
      */
     public function collection(): Collection
     {
-        $orders = \App\Services\Orders::getOrders(self::$targetDate);
+        $orders = \App\Services\Orders::getOrders(self::$targetDate, self::$targetDate, false);
         $collections = [];
         foreach ($orders as $order){
             for ($q = 1; $q <= $order->quantity; $q++) { //個数が1個以上の場合は顧客名などを空欄にしたうえでその分列を追加する
