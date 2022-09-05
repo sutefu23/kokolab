@@ -23,7 +23,7 @@ class InvoiceExport
     public function download($filename)
     {
         $spreadsheet = PhpSpreadsheet\IOFactory::load(app_path($this->template_file));
-        $collection = \App\Services\Orders::getOrders(self::$targetDate);
+        $collection = \App\Services\Orders::getOrders(self::$targetDate, self::$targetDate, false);
         $key_groups = $collection->keyBy('reception_number');
         foreach ($key_groups as $key_obj){
             $orders = $collection->where('reception_number', $key_obj->reception_number);

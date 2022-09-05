@@ -24,14 +24,20 @@ class Orders{
      * @param string|null $toDate
      * @return Collection
      */
-    public static function getOrders(string $fromDate, string $toDate = null): Collection
+    public static function getOrders(string $fromDate, string $toDate = null, $is_shipping_fixed = null): Collection
     {
         if(!$toDate){
             $toDate = $fromDate;
         }
-        return DB::table('orders')
-            ->whereBetween('delivery_due_date', [self::_getQueryDate($fromDate), self::_getQueryDate($toDate)])
-            ->orderByRaw("
+        $query = DB::table('orders')
+            ->whereBetween('delivery_due_date', [self::_getQueryDate($fromDate), self::_getQueryDate($toDate)]);
+
+
+        if(!is_null($is_shipping_fixed)){
+            $query->where('is_shipping_fixed', $is_shipping_fixed);
+        }
+
+        $query->orderByRaw("
                 CASE
                     WHEN feces_type = '日本郵便（ポスト投函） ' THEN 1
                     WHEN feces_type = '佐川急便' THEN 2
@@ -60,8 +66,8 @@ class Orders{
                 reception_number, -- 受付番号
                 delivery_due_date, -- 発送予定日
                 order_id -- 注文ID
-            ")
-            ->get();
+            ");
+        return  $query->get();
     }
 
     /**

@@ -34,7 +34,7 @@ class ItemGroupSheet implements FromCollection, WithHeadings, WithTitle, WithEve
     public function collection()
     {
         try {
-            return Orders::groupByItem(self::$targetDate, self::$targetDate);
+            return Orders::groupByItem(self::$targetDate, self::$targetDate, null, false);
         } catch (\Exception $e) {
         }
     }
