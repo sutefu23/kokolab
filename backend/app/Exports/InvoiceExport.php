@@ -55,7 +55,7 @@ class InvoiceExport
                 $sheet->getCell('L' . $row)->setValue($order->quantity);//数量
                 $sheet->getCell('N' . $row)->setValue($order->unit_price);//単価
                 $sheet->getCell('P' . $row)->setValue($order->subtotal);//小計
-                $temp_total =+ (int)$order->subtotal;
+                $temp_total = $temp_total + (int)$order->subtotal;
                 $tax_sum[$order->tax_rate] = $tax_sum[$order->tax_rate] + $order->subtotal;//key = {8%, 10%}
                 $row = $row + 2;
                 $No ++;

@@ -117,6 +117,8 @@ yarn-watch-poll:
 	docker-compose exec web yarn watch-poll
 yarn-hot:
 	docker-compose exec web yarn hot
+yarn-build:
+	docker-compose exec web yarn prod
 packages=""
 yarn-add:
 	docker-compose exec web yarn add ${packages}
