@@ -41,6 +41,7 @@ class InvoiceExport
                 $sheet->getCell('E11')->setValue(Carbon::parse($orders->first()->next_delivery_expected_date)->format('Y年m月d日')); // 次回発送
             }
             $sheet->getCell('E12')->setValue($orders->first()->fixed_term_delivery_cycle); // お届け周期
+            $sheet->getCell('E13')->setValue($orders->first()->payment_methods); // お支払い方法
             $sheet->getCell('N4')->setValue(Carbon::parse($orders->first()->delivery_due_date)->format('Y年m月d日')); // 発送日
             //明細
             $row = 22;
@@ -72,7 +73,22 @@ class InvoiceExport
             $sheet->getCell('M42')->setValue($tax_sum['8%']); // 8% 税率対象合計
             $sheet->getCell('M43')->setValue($tax_sum['10%']); // 10% 税率対象合計
 
-            $sheet->getCell('B46')->setValue($orders->first()->communication_field_to_guest); // お客様への通信欄
+            $payment_note = (function($payment_methods){//支払い方法による備考付記
+                switch ($payment_methods) {
+                case 'クレジットカード':
+                case 'Amazon Pay':
+                case '楽天ペイ（オンライン決済）':
+                    return "※クレジットカードにてお支払い完了しています。\n\n";                
+                case 'NP(後払いwiz)':
+                    return "※同封のコンビニ後払い用紙にてお支払いをお願いいたします。\n\n";
+                case 'NP(後払い)':
+                case 'GMO後払い':
+                    return "※コンビニ後払い用紙は、別送でのお届けとなります。後日お届けする用紙にてお支払いお願いいたします。\n\n";        
+                default:
+                    return "";                
+            }})($orders->first()->payment_methods);
+
+            $sheet->getCell('B46')->setValue($payment_note . $orders->first()->communication_field_to_guest); // お客様への通信欄
 
             $spreadsheet->addSheet($sheet);
         }
