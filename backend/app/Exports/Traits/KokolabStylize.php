@@ -19,10 +19,10 @@ trait KokolabStylize
         //データ範囲の指定
         $rowIndex = $sheet->getHighestRow();
         $column = $sheet->getHighestColumn();
-        SheetBorderable::setDataRange($sheet,$rowIndex, $column);
+        self::setDataRange($sheet,$rowIndex, $column);
 
         //ヘッダーの色
-        SheetColorable::setRowBgColor($sheet,1,$column,"#eeeeee");
+        self::setRowBgColor($sheet,1,$column,"#eeeeee");
 
 
         //背景色の変更
@@ -33,13 +33,13 @@ trait KokolabStylize
             $found_index = array_search($item_code, array_column($color_master, 'item_code'));
             if($found_index !== false){
                 $hex = $color_master[$found_index]['color'];
-                SheetColorable::setRowBgColor($sheet,$row,$column,$hex);
+                self::setRowBgColor($sheet,$row,$column,$hex);
             }
 
             //便種による色設定
             $sender_name = $sheet->getCell('K'. $row)->getValue();
             if(strpos($sender_name,'ヤマト') !== false){
-                SheetBorderable::setRowBorderColor($sheet,$row,$column,'#FFFF0000');
+                self::setRowBorderColor($sheet,$row,$column,'#FFFF0000');
             }
 
         }

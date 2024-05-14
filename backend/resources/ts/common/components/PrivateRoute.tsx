@@ -1,20 +1,24 @@
-import { Route, RouteProps } from "react-router";
 import React from "react";
-import Login from "../../pages/Account/Login";
+import { Route, RouteProps, Redirect } from "react-router-dom"; // Redirectをインポートする
 import useCurrentUser from "../../hooks/user/useCurrentUser";
 
-
 export function PrivateRoute({ children, ...rest }: RouteProps): JSX.Element {
-
     const isLogin: boolean = useCurrentUser() ? true : false;
 
     return (
         <Route
             {...rest}
-            render={() =>
+            render={(routeProps) =>
                 isLogin ? (
-                    children
-                ) : <Login/>
+                    (children as React.ReactNode)
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                            state: { from: routeProps.location },
+                        }}
+                    /> // ログインページへのリダイレクト
+                )
             }
         />
     );

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Orders{
     //DBで検索に使うため、Y-m-d H:i:sの形からタイムゾーンを考慮したY-m-dの形にします。
@@ -29,6 +30,7 @@ class Orders{
         if(!$toDate){
             $toDate = $fromDate;
         }
+
         $query = DB::table('orders')
             ->whereBetween('delivery_due_date', [self::_getQueryDate($fromDate), self::_getQueryDate($toDate)]);
 
@@ -67,6 +69,7 @@ class Orders{
                 delivery_due_date, -- 発送予定日
                 order_id -- 注文ID
             ");
+
         return  $query->get();
     }
 

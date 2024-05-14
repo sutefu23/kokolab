@@ -14,3 +14,4 @@ backend/public/js/app.js
 .ftpaccess
 *.log
 backend/storage/result_excel.xlsx
+infra/docker/data

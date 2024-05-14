@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 class PickingListExport implements WithMultipleSheets
 {
     use Exportable;
-    static $targetDate;
+    static string $targetDate;
 
     public function __construct($targetDate)
     {

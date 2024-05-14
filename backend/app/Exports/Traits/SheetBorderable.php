@@ -1,10 +1,9 @@
 <?php
 namespace App\Exports\Traits;
 
-use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
+use Illuminate\Support\Facades\Log;
 trait SheetBorderable
 {
     private static Worksheet $sheet;
@@ -19,7 +18,7 @@ trait SheetBorderable
      */
     public static function setDataRange(Worksheet &$sheet , int $end_row, string $end_col)
     {
-        $xls_coordinate = "A0:" . $end_col. $end_row;
+        $xls_coordinate = "A1:" . $end_col. $end_row;
 
         $styleArray = [
             'borders' => [
@@ -28,8 +27,9 @@ trait SheetBorderable
                 ],
             ],
         ];
-
+//        $xls_coordinate = "A1:E10";
         $sheet->getStyle($xls_coordinate)->applyFromArray($styleArray);
+
     }
     /**
      * @param Worksheet $sheet
