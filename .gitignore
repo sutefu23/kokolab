@@ -4,9 +4,8 @@
 # Docker Compose
 .env
 
-backend/yarn.lock
-backend/package-lock.json
-backend/composer.lock
+backend/vendor
+backend/.vendor
 backend/public/js/app.js
 
 .htaccess
