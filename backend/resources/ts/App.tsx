@@ -38,7 +38,7 @@ const App: React.FC = () => {
         <div className="App" id="wrapper">
             <Router>
                 <Switch>
-                    <PrivateRoute path="/" exact>
+                    <PrivateRoute path="/admin">
                         <RecoilRoot>
                             <Admin />
                         </RecoilRoot>
@@ -48,7 +48,11 @@ const App: React.FC = () => {
                     </AccountRoute>
                     {/* Catch-all route to handle non-existing paths */}
                     <Route path="*">
-                        {user ? <Redirect to="/" /> : <Redirect to="/login" />}
+                        {user ? (
+                            <Redirect to="/admin" />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
                     </Route>
                 </Switch>
             </Router>
