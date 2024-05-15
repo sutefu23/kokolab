@@ -30,14 +30,17 @@
                 $orders = $collection->where('reception_number', $key_obj->reception_number);
                 $sheet = $spreadsheet->getSheetByName('テンプレート')->copy();
 
+                // 次回発送が無い方
+                $is_not_subscription = $orders->first()->fixed_term_delivery_status === "停止（休止）" || $orders->first()->next_delivery_expected_date === null;
                 // ヘッダー
                 $sheet->setTitle($orders->first()->orderer_full_name . "様"); //【注文者】氏名
                 $sheet->getCell('A5')->setValue("〒". substr($orders->first()->orderer_postal_code ,0,3) . "-". substr($orders->first()->orderer_postal_code ,3)); //【注文者】郵便番号
                 $sheet->getCell('A6')->setValue($orders->first()->orderer_prefectures . $orders->first()->orderer_city . $orders->first()->orderer_town_address . $orders->first()->orderer_building); // 【注文者】住所
                 $sheet->getCell('A7')->setValue($orders->first()->orderer_full_name); // 氏名
                 $sheet->getCell('E10')->setValue($orders->first()->reception_number); // 受注番号
-                if($orders->first()->fixed_term_delivery_status === "停止（休止）"){
+                if($is_not_subscription){
                     $sheet->getCell('E11')->setValue(""); // 次回発送null
+                    $sheet->getCell('B14')->setValue(""); // 解約案内null
                 }else{
                     $sheet->getCell('E11')->setValue(Carbon::parse($orders->first()->next_delivery_expected_date)->format('Y年m月d日')); // 次回発送
                 }
