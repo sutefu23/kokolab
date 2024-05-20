@@ -40,7 +40,7 @@
                 $sheet->getCell('E10')->setValue($orders->first()->reception_number); // 受注番号
                 if($is_not_subscription){
                     $sheet->getCell('E11')->setValue(""); // 次回発送null
-                    $sheet->getCell('B14')->setValue(""); // 解約案内null
+                    $sheet->getCell('B15')->setValue(""); // 解約案内null
                 }else{
                     $sheet->getCell('E11')->setValue(Carbon::parse($orders->first()->next_delivery_expected_date)->format('Y年m月d日')); // 次回発送
                 }
